@@ -1,0 +1,71 @@
+{% extends "occ_survey/base.html" %}
+
+{% load staticfiles %}
+
+{% block head_block %}
+<!--  css for morris charts -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+{% endblock %}
+
+{% block body_block %}
+
+<div class="container">
+	
+	<div class="row">
+		<div class="col-sm-12">
+		<div class="index-section">
+			<h3>Uncompleted Tasks:</h3>
+			<ul>
+				{% if user_profile.profile_isDone == 0 %}
+				<li><a href="{% url 'occ_survey:survey' 'profile' %}">Complete Profile Questionnaire</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-9">
+		<div class="index-section">
+			<h3>Energy Consumption: <span><button id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span></h3>
+			
+			<h4>Room {{ user_profile.room}} | Energy Consumption of Lighting (in mins) for the past 5 days:</h4>
+			<div id="daily_consumption" style="height: 300px;"></div>
+		</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-12">
+		<div class="index-section">
+			<h4>My office controls:</h4>
+		</div>
+		</div>
+	</div>
+
+	
+
+</div>
+
+{% endblock %}
+
+{% block script_block %}
+<script>
+	// data for charts
+	var data;
+	$.ajax({
+	async: false,
+	url: "{% url 'occ_survey:chart_cons' %}",
+	type: 'GET',
+	dataType: 'json', // added data type
+	success: function(res) {
+		data = res;
+	}
+});
+</script>
+
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script> -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="{% static 'occ_survey/js/charts.js' %}"></script>
+{% endblock %}

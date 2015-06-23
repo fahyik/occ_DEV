@@ -1,0 +1,65 @@
+{% extends "occ_survey/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block body_block %}
+
+	<div class="container">
+	<div class="header">
+	<h2>Hello {{ user.first_name }}</h2>
+	<h1>Your Profile</h1>
+	<p>Filling out this form will allow us to record your personal preferences with respect to lighting in your office. The results of the comfort study would be based on what you specify here.</p>
+	</div>
+	
+	<br />
+	<form id="profile-survey" class="form-group" action="{% url 'occ_survey:submit_profile' %}" method="post">
+	{% csrf_token %}	
+		{% if question_list %}
+		{% for question in question_list %}
+		<div class="choice-box">
+		<h4 style="margin-left:10px">Question {{ forloop.counter }}:</h4>
+		
+		<div class="panel panel-default panel-choices">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{ question.question_text }}</h3>
+			</div>
+		</div>
+		
+		<div class="table">
+			<table class="table table-condensed table-choices">
+				<tr>
+					<td>Strongly Disagree</td>
+					<td>Disagree</td>
+					<td>Neutral</td>
+					<td>Agree</td>
+					<td>Strongly Agree</td>
+				</tr>
+
+				<tr>
+					<td><input type="radio" name="Q{{ forloop.counter }}" value=-2></td>
+					<td><input type="radio" name="Q{{ forloop.counter }}" value=-1></td>
+					<td><input type="radio" name="Q{{ forloop.counter }}" value=0></td>
+					<td><input type="radio" name="Q{{ forloop.counter }}" value=1></td>
+					<td><input type="radio" name="Q{{ forloop.counter }}" value=2></td>
+					<input type="hidden" name="Q{{ forloop.counter }}_id" value={{ question.id }}>
+				</tr>
+			</table>
+		</div>
+		</div>
+		
+		<input type="hidden" name="question_count" value="{{forloop.counter}}">	
+		{% endfor %}
+		{% endif %}
+	
+		<div class="choice-box">	
+		<p>Please make sure you have filled out all the questions before clicking on submit.</p>
+		<p><input id="profile-submit" class="btn btn-default" type="submit" value="Submit" disabled="disabled"></p>
+		</div>
+	</form>
+	
+		<p id="debug"></p>
+{% endblock %}
+{% block script_block %}
+	<script src="{% static 'occ_survey/js/profile.js' %}"></script>
+{% endblock %}

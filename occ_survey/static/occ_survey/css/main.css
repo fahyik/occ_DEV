@@ -1,0 +1,85 @@
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+
+  font-weight: 300;
+
+}
+
+.btn {
+	font-weight: 300;
+}
+
+body {
+	padding-top: 100px;
+	margin-bottom: 50px;
+	font-weight: 300;
+}
+
+.navbar {
+	padding: 15px; 0px;
+}
+
+.footer {
+
+	width: 100%;
+	margin-bottom: 50px;
+	margin-top: 200px;
+	font-weight: 300;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.table-choices {
+	table-layout: fixed; 
+	width: 100%; 
+	text-align: center;
+	margin-bottom: 0px;
+}
+
+.table.table-condensed.table-choices td {
+	vertical-align: middle;
+}
+
+.choice-box {
+	border: 1px solid;
+	border-color: rgb(224, 224, 224);
+	padding: 10px;
+	margin: 20px 0px;
+}
+
+table.table-choices, table.table-choices td {
+	border: none !important;
+}
+
+.panel-choices, .table {
+	margin-bottom: 5px;
+}
+
+.jumbotron.welcome {
+
+	padding-top: 10px;
+	padding-bottom: 10px;
+	
+}
+
+.dashbox {
+	background-color: #ECECEC;
+	padding: 10px 20px;
+	border-radius: 5px;
+	min-height: 200px;
+	margin-bottom: 20px;
+}
+
+.index-section {
+	padding: 20px;
+	padding-bottom: 50px;	
+	margin-bottom: 0px;
+	border-bottom: 2px solid #ECECEC;
+}
+@media (max-width: 414px) {
+	td {
+		font-size: 12px;
+	}
+}

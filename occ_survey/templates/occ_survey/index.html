@@ -1,0 +1,50 @@
+{% extends "occ_survey/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block body_block %}
+	
+	<div class="container">	
+		{% if logged_out == 1 %}
+		<p>You have been logged out.</p>
+		{% elif logged_out == 2 %}
+		<p>You have already logged in.</p>
+		{% endif %}
+		
+		{% if user.is_authenticated %}
+		<div class="index-section">
+			<h4>Welcome {{ user.first_name }}!</h4>
+        </div>
+        {% endif %}
+        
+		<div class="index-section">
+			<h2>Adaptive Systems Lab</h2>
+			<h2>Lighting Control Experiment</h2>
+			<br />
+			{% if user.is_authenticated %}
+			<a class="btn btn-primary btn-lg" href="{% url 'dashboard' user.username %}" style="margin-bottom: 10px">To my dashboard <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="top: 2px"></span>
+			</a>
+			{% endif %}
+        </div>
+        
+        {% if user.is_authenticated %}
+        <div class="index-section">
+			<h2>Update:</h2>
+			<ul>
+				<li>Phase 1 of experiment has started. There are currently no automatic lighting control in place the offices. All lighting should be controlled manually!</li>
+				<li>Please remember to fill out your profile survey!</li>
+			<ul>
+        </div>
+        {% endif %}
+    </div>
+    
+	<footer class="footer">
+		<div class="container">
+			<a class="btn" href="http://suat.ethz.ch" style="text-align: left" target="_blank">Architecture and Building Systems<br />Institute of Technology in Architecture<br />ETH Zurich</a>
+			<p><a class="btn" href="mailto:yongf@ethz.ch">
+		Contact</a></p>
+		</div>
+	</footer>
+{% endblock %}
+
