@@ -1,13 +1,17 @@
 $(document).ready(function(){
 	
-	$("#profile-survey input:radio").click(function(){
-		var n = $( "#profile-survey input:radio:checked" ).length;
-		if (n == count) {
-            $('#profile-submit').removeAttr('disabled');
-        } 
-        else {
-            $('#profile-submit').attr('disabled', 'disabled');
-        }
+	$("#db_toggle_charts").click(function(){
+		$("#charts").toggleClass("hidden");
+		if ( $(this).html() == "Show") {
+			$.getScript(url_charts, function(){
+			});
+			$(this).text("Hide");
+		}
+		else {
+			$(this).text("Show");
+			$("#daily_consumption").empty();
+		}
+		
 	});
 	// endcode
 
