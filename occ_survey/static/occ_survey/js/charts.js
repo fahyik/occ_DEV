@@ -22,7 +22,7 @@ new Morris.Bar({
   // chart.
   labels: ['Consumption (mins)'],
   barColors: ['#337AB7'],
-  resize: true,
+  resize: false,
   gridTextSize: 12,
   
 });

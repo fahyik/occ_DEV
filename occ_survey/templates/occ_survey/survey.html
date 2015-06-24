@@ -8,17 +8,17 @@
 	<div class="container">
 	<div class="header">
 	<h2>Hello {{ user.first_name }}</h2>
-	<h1>Your Profile</h1>
-	<p>Filling out this form will allow us to record your personal preferences with respect to lighting in your office. The results of the comfort study would be based on what you specify here.</p>
+	<h1>{{ survey_cat.title }} Questionnaire</h1>
+	<p>{{ survey_cat.desc }}</p>
 	</div>
 	
 	<br />
-	<form id="profile-survey" class="form-group" action="{% url 'occ_survey:submit_profile' %}" method="post">
+	<form id="profile-survey" class="form-group" action="{% url 'occ_survey:submit_survey' %}" method="post">
 	{% csrf_token %}	
 		{% if question_list %}
 		{% for question in question_list %}
 		<div class="choice-box">
-		<h4 style="margin-left:10px">Question {{ forloop.counter }}:</h4>
+		<!-- <h4 style="margin-left:10px">Question {{ forloop.counter }}:</h4> -->
 		
 		<div class="panel panel-default panel-choices">
 			<div class="panel-heading">
@@ -28,27 +28,34 @@
 		
 		<div class="table">
 			<table class="table table-condensed table-choices">
+				<!--	separate into the types of questions	 -->
+				{% if question.choice.type == "radio" %}
 				<tr>
-					<td>Strongly Disagree</td>
-					<td>Disagree</td>
-					<td>Neutral</td>
-					<td>Agree</td>
-					<td>Strongly Agree</td>
+					{% for each in question.choices %}
+						{% if each %}
+						<td>{{ each }}</td>
+						{% endif %}
+					{% endfor %}
 				</tr>
 
 				<tr>
-					<td><input type="radio" name="Q{{ forloop.counter }}" value=-2></td>
-					<td><input type="radio" name="Q{{ forloop.counter }}" value=-1></td>
-					<td><input type="radio" name="Q{{ forloop.counter }}" value=0></td>
-					<td><input type="radio" name="Q{{ forloop.counter }}" value=1></td>
-					<td><input type="radio" name="Q{{ forloop.counter }}" value=2></td>
+					{% for each in question.choices %}
+					<td><input type="radio" name="Q{{ forloop.parentloop.counter }}" value="{{forloop.counter}}"></td>
+					{% endfor %}
 					<input type="hidden" name="Q{{ forloop.counter }}_id" value={{ question.id }}>
 				</tr>
+				{% elif question.choice.type == "open" %}
+				<tr>
+					<td><textarea class="form-control" name="Q{{ forloop.counter }}" placeholder="Text input" rows="3"></textarea></td>
+					<input type="hidden" name="Q{{ forloop.counter }}_id" value={{ question.id }}>
+				</tr>
+				{% endif %}
 			</table>
 		</div>
 		</div>
 		
-		<input type="hidden" name="question_count" value="{{forloop.counter}}">	
+		<input type="hidden" name="question_count" value="{{forloop.counter}}">
+		<input type="hidden" name="survey_cat" value="{{survey_cat.cat}}">	
 		{% endfor %}
 		{% endif %}
 	

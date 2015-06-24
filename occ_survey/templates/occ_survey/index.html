@@ -30,11 +30,12 @@
         
         {% if user.is_authenticated %}
         <div class="index-section">
-			<h2>Update:</h2>
-			<ul>
-				<li>Phase 1 of experiment has started. There are currently no automatic lighting control in place the offices. All lighting should be controlled manually!</li>
-				<li>Please remember to fill out your profile survey!</li>
-			<ul>
+			<h2 style="margin-bottom: 20px;">Update:</h2>
+			{% for each in adminText %}
+			{% if each %}
+				<p>{{ each }}</p>
+			{% endif %}
+			{% endfor %}
         </div>
         {% endif %}
     </div>
