@@ -20,7 +20,7 @@ from occ_survey.views import index, user_login, user_logout, dashboard
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^survey/', include('occ_survey.urls', namespace="occ_survey")),
-    url(r'^$', index),
+    url(r'^$', index, name="index"),
     url(r'^dashboard/(?P<username>[\w\-]+)/$', dashboard, name="dashboard"),
     url(r'^user_login/$', user_login, name="user_login"),
     url(r'^user_logout/$', user_logout, name="user_logout"),
