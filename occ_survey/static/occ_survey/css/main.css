@@ -12,6 +12,7 @@ body {
 	padding-top: 100px;
 	margin-bottom:200px;
 	font-weight: 300;
+	font-size: 15px;
 }
 
 .navbar {
@@ -74,13 +75,20 @@ table.table-choices, table.table-choices td {
 }
 
 .index-section {
-	padding: 20px;
-	padding-bottom: 50px;	
+	padding: 40px 20px;
+	padding-bottom: 60px;	
 	margin-bottom: 0px;
 	border-bottom: 2px solid #ECECEC;
 }
+
 @media (max-width: 414px) {
 	td {
 		font-size: 12px;
+	}
+}
+
+@media (min-width: 1200px) {
+	.container {
+	  width: 1000px;
 	}
 }

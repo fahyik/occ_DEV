@@ -22,9 +22,10 @@
 			<h2>Adaptive Systems Lab</h2>
 			<h2>Lighting Control Experiment</h2>
 			<br />
+			<a class="btn btn-primary btn-lg" href="{% url 'about' %}" style="width: 300px; margin-bottom: 10px">About The Experiment</a>
+			<br />
 			{% if user.is_authenticated %}
-			<a class="btn btn-primary btn-lg" href="{% url 'dashboard' user.username %}" style="margin-bottom: 10px">To my dashboard <span class="glyphicon glyphicon-arrow-right" aria-hidden="true" style="top: 2px"></span>
-			</a>
+			<a class="btn btn-primary btn-lg" href="{% url 'dashboard' user.username %}" style="width: 300px; margin-bottom: 10px">My Dashboard</a>
 			{% endif %}
         </div>
         

@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from occ_survey.views import index, user_login, user_logout, dashboard
+from occ_survey.views import index, user_login, user_logout, dashboard, about
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^survey/', include('occ_survey.urls', namespace="occ_survey")),
     url(r'^$', index, name="index"),
     url(r'^dashboard/(?P<username>[\w\-]+)/$', dashboard, name="dashboard"),
+    url(r'^about/$', about, name="about"),
     url(r'^user_login/$', user_login, name="user_login"),
     url(r'^user_logout/$', user_logout, name="user_logout"),
 ]

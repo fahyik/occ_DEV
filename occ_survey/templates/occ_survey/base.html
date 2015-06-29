@@ -48,14 +48,17 @@
 		<div class="collapse navbar-collapse" id="navbar">
 
 			<div class="navbar-right" style="margin-right:0px">
-			{% if user.is_authenticated %}
-				<ul class="nav navbar-nav">
+			<ul class="nav navbar-nav">
+				{% if user.is_authenticated %}
 				<li><a href="#">{{ user.username }}</a></li>
-				<li><a href="{% url 'dashboard' user.username %}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>  Dashboard</a></li>
-				</ul>
-				<a href="{% url 'user_logout' %}" class="btn btn-default navbar-btn">Log Out</a>
+				<li><a href="{% url 'dashboard' user.username %}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true" style="top: 2px"></span>  Dashboard</a></li>
+				{% endif %}
+				<li><li><a href="{% url 'about' %}">About</a></li>
+			</ul>
+			{% if user.is_authenticated %}
+			<a href="{% url 'user_logout' %}" class="btn btn-default navbar-btn">Log Out</a>
 			{% else %}
-				<a href="{% url 'user_login' %}" class="btn btn-default navbar-btn">Log In</a>
+			<a href="{% url 'user_login' %}" class="btn btn-default navbar-btn">Log In</a>
 			{% endif %}
 			</div>
 

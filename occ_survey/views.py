@@ -178,6 +178,8 @@ def chart_daily_consumption(request):
 			data["dates"].append((today - datetime.timedelta(i)).strftime("%d-%b"))
 	
 	return HttpResponse(json.dumps(data))
-		
+
+def about(request):
+	return render(request, 'occ_survey/about.html', {})		
 		
 		

@@ -1,0 +1,72 @@
+{% extends "occ_survey/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block body_block %}
+	
+	<div class="container">	
+        
+		<div class="index-section">
+			<h2>About</h2>
+			<p>The Adaptive Systems Laboratory will be conducting a lighting control experiment in selected offices on the G floor of HPZ building. A lighting control system that adapts automatically to the occupants' preferences and behaviours will be installed in each office. The experiment will take place from the middle of June 2015 to the end of September 2015.</p>
+        </div>
+        
+        <div class="index-section">
+			<h3>The Lighting Control System</h3>
+			<p>An independent system will be installed in each office. It consists of a light sensor, an occupancy sensor and a mini-computer. The control functions simply via two set-points: minimum inoccupancy time delay and illuminance threshold.
+			<p><u>Minimum Inoccupancy Time Delay</u></p>
+			<p>A typical occupancy sensor works by employing a fixed minimum time delay (TD) value. In conventional offices, this is normally set to about 15 minutes. This means that the room will only be deemed unoccupied (and have its lights switched off) if the sensor does not detect any motion during the previous 15 minutes.</p>
+			<p>We believe that this arbitrarily set TD value is often too large and leads to energy wastage. We have therefore implemented an algorithm based on a simple statistical model to calculate a unique TD value for each office based on the occupancy data collected. The calculation is based only on data gathered during the past month so as to continually adapt to any changes in the office.</p>
+			<p><u>Illuminance Threshold</u></p>
+			<p>Likewise, we believe that the illuminance threshold is occupant- or office-specific. For this, we record the illuminance value each time the lights are switched on in the office. The mean or median value is then taken, whichever is lower, as the minimum illuminance threshold. The maximum illuminance threshold is  calculated by adding the illuminance provided by the artificial lights in the office. These two values are then used to determine if there is sufficient illuminance in the office.</p>
+			<br />
+			<p>The control will determine if the room requires lighting via these two set-points. In short, the lights will be switched on when the room is occupied and there is insufficient illuminance; they will be switched off when the room is unoccupied or when there is too much illuminance.</p>
+			<p>
+        </div>
+        
+        <div class="index-section">
+			<h3>Objectives</h3>
+			<p>We have concluded from our previous experiment that the implementation of such a lighting control system can lead to significant energy savings. The main objective of this experiment is then to investigate the effects of such the system on occupants' comfort.</p>
+			<p>The optimal goal will be that the control system can save energy at zero or negative expense of occupants' comfort.</p>
+        </div>
+        
+        <div class="index-section">
+			<h3>Experimental Outline</h3>
+			<br />
+			<img src="{% static 'occ_survey/images/experiment_outline.png' %}" class="img-responsive center-block" alt="experiment outline"></img>
+			<p>The experiment will be split into 2 or possible 3 phases (refer to chart above).</p> 
+			<p>There will be no lighting control system in place during the first phase. Occupants will operate the lights manually with the push button switches in their offices. This phase will serve as a reference in terms of both electricity consumption and comfort for comparison with the later phases.</p>
+			<p>The lighting control system will be put in operation in the second phase. The lighting will be controlled automatically, but occupants will also retain manual control with the push button switches. In addition, a dashboard on a web interface will be provided to each occupant, with which he/she will be able to:</p>
+			<ol>
+				<li>view the lighting energy consumption in his/her office</li>
+				<li>override the control system</li>
+				<li>change the set points of the control system.</li>
+			</ol>
+			<p>A third possible phase may be conducted depending on circumstances. This phase will include an immediate feedback loop in the control algorithm such that overrides will be processed and learned by the system instantly, removing the need for the occupant to change the set points manually.</p>
+			<br />
+			<p>In order to conduct the comfort study, a series of questionnaires will be sent out via email. All participants will be required to fill out a profile questionnaire at the beginning. This is used to determine individual preferences with regards to lighting and visual comfort.</p>
+			<p>A comfort questionnaire will be sent out at the end of the first phase to assess each occupant's comfort for the duration of the phase.</p>
+			<p>The same comfort questionnaire will be sent out at the end of the second phase in order for us to evaluate the effects of the control system on the occupants. A questionnaire specific to the control system will also be sent out at this point.</p>
+			<p>Should a third phase be conducted, a set of questionnaires similar to that sent out at the end of phase 2 will be sent out.</p>  
+			
+        </div>
+        
+        <div class="index-section">
+			<h3>Your Task</h3>
+			<br />
+			<p>Your task is to simply assist us by filling out each of the questionnaires we send you as accurately as you can. We will also appreciate any feedback with regards to the dashboard interface, control system or whatever that pleases or displeases you.  
+        </div>
+        
+        <div class="index-section">
+			<h3>Links</h3>
+			<p>If you are interested in finding out more about the control system and our previous experiment, please refer to the following link.</p>
+			<p>&nbsp&nbsp&nbsp&nbsp<a href="http://www.sciencedirect.com/science/article/pii/S0378778815001759" style="
+    font-size: 12px;" target="_blank">Z Nagy, FY Yong, M Frei, A Schlueter - Occupant centered lighting control for comfort and energy efficient building operation.</a></p>
+    		<p>For any other queries, please direct them <a href="mailto:yongf@ethz.ch">here</a>.</p>
+        </div>
+
+    </div>
+    
+{% endblock %}
+
