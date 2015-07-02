@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from occ_survey.views import index, user_login, user_logout, dashboard, about
+from occ_survey.views import index, user_login, user_logout, dashboard, about, buttons
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^$', index, name="index"),
     url(r'^dashboard/(?P<username>[\w\-]+)/$', dashboard, name="dashboard"),
     url(r'^about/$', about, name="about"),
+    url(r'^buttons/$', buttons, name="buttons"),
     url(r'^user_login/$', user_login, name="user_login"),
     url(r'^user_logout/$', user_logout, name="user_logout"),
 ]

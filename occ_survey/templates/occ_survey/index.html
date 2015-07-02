@@ -15,6 +15,7 @@
 		{% if user.is_authenticated %}
 		<div class="index-section">
 			<h4>Welcome {{ user.first_name }}!</h4>
+			<p><a style="color:#DB6480" href="{% url 'buttons' %}">are the manual push-button switches in your office not working as you intend them to?</a></p>
         </div>
         {% endif %}
         

@@ -106,4 +106,4 @@ USE_TZ = False
 STATIC_ROOT = '/Users/asl/Desktop/fahyik/django/occ_static/'
 #STATIC_URL = 'http://129.132.32.187/static/occ_static/'
 STATIC_URL = '/static/'
-LOGIN_URL = '/occ/user_login/'
+LOGIN_URL = '/user_login/'

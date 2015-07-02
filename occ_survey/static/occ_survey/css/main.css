@@ -45,11 +45,18 @@ html {
 }
 
 .choice-box {
-	border: 1px solid;
-	border-color: rgb(224, 224, 224);
+	border: 2px solid;
+	border-color: rgb(240, 240, 240);
+	border-radius: 15px;
 	padding: 10px;
 	margin: 20px 0px;
 }
+
+.choice-box:hover {
+	border-color: rgb(198, 213, 224);
+}
+
+
 
 table.table-choices, table.table-choices td {
 	border: none !important;
@@ -91,4 +98,17 @@ table.table-choices, table.table-choices td {
 	.container {
 	  width: 1000px;
 	}
+}
+
+.panel, .panel-heading {
+	border: 0px;
+}
+
+.panel-default > .panel-heading {
+  background-color: rgba(198, 213, 224, 0.5);
+  border-radius: 25px;
+}
+
+.panel {
+	box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 }

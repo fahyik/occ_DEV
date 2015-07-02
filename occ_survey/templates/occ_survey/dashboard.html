@@ -3,8 +3,6 @@
 {% load staticfiles %}
 
 {% block head_block %}
-<!--  css for morris charts -->
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 {% endblock %}
 
 {% block body_block %}
@@ -30,8 +28,8 @@
 		<div class="index-section">
 			<h3>Energy Consumption: <span><button id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span></h3>
 			<div id="charts" class="hidden">
-			<h4>Room {{ user_profile.room}} | Energy Consumption of Lighting (in mins) for the past 5 days:</h4>
-			<div id="daily_consumption" style="height: 300px;"></div>
+			<h4>Room {{ user_profile.room}} | Energy Consumption of Lighting (in hours) for the past week:</h4>
+			<canvas id="myChart" style="height: 250px; width: 100%"></canvas>
 			</div>
 		</div>
 		</div>
@@ -54,22 +52,23 @@
 
 {% block script_block %}
 <script>
-	// data for charts
+	// url called in ajax_get_script in dashboard.js 
 	var url_charts = "{% static 'occ_survey/js/charts.js' %}";
-	var data;
+	// data for charts, ajax get-json from backend
+	var data_db;
 	$.ajax({
 	async: true,
 	url: "{% url 'occ_survey:chart_cons' %}",
 	type: 'GET',
 	dataType: 'json', // added data type
 	success: function(res) {
-		data = res;
+		data_db = res;
 	}
 });
 </script>
-
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<!-- Chart.js scripts -->
+<script src="{% static 'occ_survey/js/Chart.js' %}"></script>
+<script src="{% static 'occ_survey/js/Chart.Scatter.js' %}"></script>
+<!-- js for dashboard.html page -->
 <script src="{% static 'occ_survey/js/dashboard.js' %}"></script>
 {% endblock %}

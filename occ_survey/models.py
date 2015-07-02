@@ -12,11 +12,11 @@ class Choice(models.Model):
 	
 	name = models.CharField(max_length=30, null=False, unique=True)
 	type = models.CharField(max_length=10, choices=TYPE_CHOICES)
-	choice1 = models.CharField(max_length=30, null=True)
-	choice2 = models.CharField(max_length=30, null=True)
-	choice3 = models.CharField(max_length=30, null=True)
-	choice4 = models.CharField(max_length=30, null=True)
-	choice5 = models.CharField(max_length=30, null=True)
+	choice1 = models.CharField(max_length=30, blank= True, null=True)
+	choice2 = models.CharField(max_length=30, blank= True, null=True)
+	choice3 = models.CharField(max_length=30, blank= True, null=True)
+	choice4 = models.CharField(max_length=30, blank= True, null=True)
+	choice5 = models.CharField(max_length=30, blank= True, null=True)
 	
 	def __unicode__(self):
 		return self.name
@@ -28,7 +28,7 @@ class Question(models.Model):
 	date_updated = models.DateTimeField(auto_now=True)
 	question_text = models.CharField(max_length=255)
 	question_cat = models.CharField(max_length=255)
-	choice_name = models.CharField(max_length=30, null=True, blank=True)
+	choice_name = models.CharField(max_length=30, null=True, blank=True, editable=False)
 	order = models.IntegerField(default = 0)
 	
 	def save(self, *args, **kwargs):

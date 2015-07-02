@@ -1,0 +1,21 @@
+{% extends "occ_survey/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block body_block %}
+	
+	<div class="container">	
+        
+		<div class="index-section">
+			<h2>Operating the push button light switches</h2>
+			<p>Due to certain peculiarities and limitations, the manual push button switches do not register the on/off signals sent out by the control system.</p>
+			<p>This means that if you had switched on the lights manually, and the control system  switched off your lights thereafter, the push button switch will still remain at "ON". In this case, if you had wanted to turn on the lights manually, pushing the button once will only switch it to "OFF" and hence the lights do not switch on. To switch it "ON", you will have to push the button again. This will happen if the control system had previously triggered some kind of action in the office.</p>
+			<p><b>In short, if the lights do not switch on or off as desired <u>within roughly 3 seconds of the first push</u>, push it again.</b></p>
+			<p>This behaviour is a feature of the digitalStrom system in place in HPZ and cannot be modified by us. We apologise for any inconvenience or confusion caused.</p>
+        </div>
+
+    </div>
+    
+{% endblock %}
+

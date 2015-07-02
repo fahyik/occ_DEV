@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import json
+from .mail.exp_mail import startmail
 # Create your views here.
 
 def index(request):
@@ -122,7 +123,7 @@ def user_login(request):
 				if "next" in request.POST:
 					return HttpResponseRedirect(request.POST["next"])
 				else:
-					return HttpResponseRedirect(reverse("occ_survey:index"))
+					return HttpResponseRedirect(reverse("index"))
 			
 			else:
 				
@@ -144,7 +145,7 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	request.session['redirect_logout'] = True
-	return redirect('occ_survey:index')
+	return redirect('index')
 
 @login_required
 def dashboard(request, username):
@@ -171,7 +172,7 @@ def chart_daily_consumption(request):
 	}
 	
 	for i in range(0,7) :
-		data["consumption"].append(len(LogLighting.objects.filter(time__year=year).filter(time__month=month).filter(time__day=day-i).filter(**{room: 1})))	
+		data["consumption"].append(round(len(LogLighting.objects.filter(time__year=year).filter(time__month=month).filter(time__day=day-i).filter(**{room: 1}))/60.0, 2))	
 		if i == 0 :
 			data["dates"].append("Today")
 		else:
@@ -180,6 +181,15 @@ def chart_daily_consumption(request):
 	return HttpResponse(json.dumps(data))
 
 def about(request):
-	return render(request, 'occ_survey/about.html', {})		
+	return render(request, 'occ_survey/about.html', {})
+	
+def buttons(request):
+	return render(request, 'occ_survey/buttons.html', {})
+
+def mail(request):
+	user_list = User.objects.all()[:1]
+	for user in user_list:
+		startmail(user)
+	return HttpResponse("mass mail")
 		
 		
