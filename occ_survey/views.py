@@ -102,7 +102,7 @@ def submit_survey(request):
 	u.save()
 	
 	#return HttpResponse("Answer to question: " + question_id + " is " + answer)
-	return render(request, 'occ_survey/base.html', {"text": "Thank you for submitting!",})
+	return render(request, 'occ_survey/base.html', {"text": "Thank you for submitting!", "homelink": True, })
 	
 def user_login(request):
 	
@@ -185,16 +185,61 @@ def chart_daily_consumption(request):
 	
 	return HttpResponse(json.dumps(data))
 
+#view to explain the experiment
 def about(request):
 	return render(request, 'occ_survey/about.html', {})
-	
+
+#view to explain how the buttons function	
 def buttons(request):
 	return render(request, 'occ_survey/buttons.html', {})
 
 def mail(request):
-	user_list = User.objects.all()[:1]
+	user_list = User.objects.all()
+	text = []
 	for user in user_list:
 		startmail(user)
-	return HttpResponse("mass mail")
+		text.append(user.email)
+	return HttpResponse(json.dumps(text))
+
+#view to extract live status from db, needs to pass GET with room
+def get_status(request):
+	if request.GET:
+		room = request.GET["room"].lower().replace(".", "_")
+		room2 = request.GET["room"]
+	else:
+		user_profile = UserProfile.objects.get(user=request.user)
+		room = user_profile.room.lower().replace(".", "_")
+		room2 = user_profile.room
+	
+	time = LogLighting.objects.values_list("time", flat=True).order_by('-id')[:1][0]
+	lights = LogLighting.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	lux = LogLux.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	
+	td = ControlTd1.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	lux_th = ControlLuxThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	upp_th = ControlLuxUpperThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	
+	data = {
+		"ok": True,
+		"res": {
+			"room": room2,
+			"time": time.strftime("%c"),
+			"lights": lights,
+			"lux": lux,
+		},
+		"res2": {
+			"td": td,
+			"lux_th": lux_th,
+			"upp_th": upp_th,
+		},
+	}
+	return HttpResponse(json.dumps(data, sort_keys=True))
+
+
+
+
+
+
+
 		
 		

@@ -120,3 +120,85 @@ class LogLighting(models.Model):
     class Meta:
         managed = False
         db_table = 'log_lighting'
+
+class ControlTd1(models.Model):
+    time = models.DateTimeField()
+    g22 = models.IntegerField(db_column='G22', blank=True, null=True)  # Field name made lowercase.
+    g23 = models.IntegerField(db_column='G23', blank=True, null=True)  # Field name made lowercase.
+    rpi_0 = models.IntegerField(db_column='RPi_0', blank=True, null=True)  # Field name made lowercase.
+    g24 = models.IntegerField(db_column='G24', blank=True, null=True)  # Field name made lowercase.
+    g25_1 = models.IntegerField(db_column='G25.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g25_2 = models.IntegerField(db_column='G25.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_1 = models.IntegerField(db_column='G26.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_2 = models.IntegerField(db_column='G26.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g27 = models.IntegerField(db_column='G27', blank=True, null=True)  # Field name made lowercase.
+    g31_1 = models.IntegerField(db_column='G31.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g31_2 = models.IntegerField(db_column='G31.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_1 = models.IntegerField(db_column='G32.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_2 = models.IntegerField(db_column='G32.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'control_td1'
+
+class ControlLuxThreshold(models.Model):
+    time = models.DateTimeField()
+    g22 = models.IntegerField(db_column='G22', blank=True, null=True)  # Field name made lowercase.
+    g23 = models.IntegerField(db_column='G23', blank=True, null=True)  # Field name made lowercase.
+    rpi_0 = models.IntegerField(db_column='RPi_0', blank=True, null=True)  # Field name made lowercase.
+    g24 = models.IntegerField(db_column='G24', blank=True, null=True)  # Field name made lowercase.
+    g25_1 = models.IntegerField(db_column='G25.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g25_2 = models.IntegerField(db_column='G25.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_1 = models.IntegerField(db_column='G26.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_2 = models.IntegerField(db_column='G26.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g27 = models.IntegerField(db_column='G27', blank=True, null=True)  # Field name made lowercase.
+    g31_1 = models.IntegerField(db_column='G31.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g31_2 = models.IntegerField(db_column='G31.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_1 = models.IntegerField(db_column='G32.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_2 = models.IntegerField(db_column='G32.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'control_lux_threshold'
+
+
+class ControlLuxUpperThreshold(models.Model):
+    time = models.DateTimeField()
+    g22 = models.IntegerField(db_column='G22', blank=True, null=True)  # Field name made lowercase.
+    g23 = models.IntegerField(db_column='G23', blank=True, null=True)  # Field name made lowercase.
+    rpi_0 = models.IntegerField(db_column='RPi_0', blank=True, null=True)  # Field name made lowercase.
+    g24 = models.IntegerField(db_column='G24', blank=True, null=True)  # Field name made lowercase.
+    g25_1 = models.IntegerField(db_column='G25.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g25_2 = models.IntegerField(db_column='G25.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_1 = models.IntegerField(db_column='G26.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_2 = models.IntegerField(db_column='G26.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g27 = models.IntegerField(db_column='G27', blank=True, null=True)  # Field name made lowercase.
+    g31_1 = models.IntegerField(db_column='G31.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g31_2 = models.IntegerField(db_column='G31.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_1 = models.IntegerField(db_column='G32.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_2 = models.IntegerField(db_column='G32.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'control_lux_upper_threshold'
+
+
+class ControlLuxWLights(models.Model):
+    time = models.DateTimeField()
+    g22 = models.IntegerField(db_column='G22', blank=True, null=True)  # Field name made lowercase.
+    g23 = models.IntegerField(db_column='G23', blank=True, null=True)  # Field name made lowercase.
+    rpi_0 = models.IntegerField(db_column='RPi_0', blank=True, null=True)  # Field name made lowercase.
+    g24 = models.IntegerField(db_column='G24', blank=True, null=True)  # Field name made lowercase.
+    g25_1 = models.IntegerField(db_column='G25.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g25_2 = models.IntegerField(db_column='G25.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_1 = models.IntegerField(db_column='G26.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g26_2 = models.IntegerField(db_column='G26.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g27 = models.IntegerField(db_column='G27', blank=True, null=True)  # Field name made lowercase.
+    g31_1 = models.IntegerField(db_column='G31.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g31_2 = models.IntegerField(db_column='G31.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_1 = models.IntegerField(db_column='G32.1', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    g32_2 = models.IntegerField(db_column='G32.2', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'control_lux_w_lights'
