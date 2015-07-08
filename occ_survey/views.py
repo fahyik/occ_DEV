@@ -161,18 +161,23 @@ def dashboard(request, username):
 def chart_daily_consumption(request):
 	user_profile = UserProfile.objects.get(user=request.user)
 	room = user_profile.room.lower().replace(".", "_")
+	#for debug test other rooms
+	#room = "g32_2"
 	today = datetime.date.today()
-	day = today.day
-	month = today.month
-	year = today.year
 	
 	data = { 
 		"consumption": [],
 		"dates": [],
 	}
 	
+	#number of past days to show: default = 7
 	for i in range(0,7) :
-		data["consumption"].append(round(len(LogLighting.objects.filter(time__year=year).filter(time__month=month).filter(time__day=day-i).filter(**{room: 1}))/60.0, 2))	
+		lighting_list = LogLighting.objects.filter(time__gte= (today-datetime.timedelta(i)))
+		lighting_list = lighting_list.filter(time__lt= (today-datetime.timedelta(i-1)))
+		lighting_list = lighting_list.filter(**{room: 1})
+		consumption = round(len(lighting_list)/60.0, 2)
+		data["consumption"].append(consumption)
+	#data["consumption"].append(round(len(LogLighting.objects.filter(time__year=year).filter(time__month=month).filter(time__day=day-i).filter(**{room: 1}))/60.0, 2))	
 		if i == 0 :
 			data["dates"].append("Today")
 		else:

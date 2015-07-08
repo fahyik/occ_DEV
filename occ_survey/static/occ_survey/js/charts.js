@@ -2,11 +2,14 @@
 var ctx = document.getElementById("myChart").getContext("2d");
 Chart.defaults.global.responsive = true;
 
+var size = data_db.consumption.length;
+console.log(data_db.consumption.length);
+
 // create arrays from data from db
 var xlabels = [];
 var yvalues = [];
 
-for (var day = 0; day < 7; day++) {
+for (var day = size-1; day >= 0; day--) {
     xlabels.push(data_db.dates[day]);
     yvalues.push(data_db.consumption[day]);
 }
