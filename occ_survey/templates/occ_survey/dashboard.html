@@ -3,6 +3,7 @@
 {% load staticfiles %}
 
 {% block head_block %}
+<link href="{% static 'occ_survey/bootstrap/css/bootstrap-switch.min.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block body_block %}
@@ -24,12 +25,42 @@
 	
 	{% if user.username == "admin" or  user.username == "zoltan" %}
 	<div class="row">
-		<div class="col-sm-9">
-		<div class="index-section">
-			<h3>Energy Consumption: <span><button id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span></h3>
-			<div id="charts" class="hidden">
-			<h4>Room {{ user_profile.room}} | Energy Consumption of Lighting (in hours) for the past week:</h4>
-			<canvas id="myChart" style="height: 250px; width: 100%"></canvas>
+		<div class="col-sm-12">
+		<div class="index-section-head">
+			<h3>My office: <span class="h2">{{ user_profile.room }}</h2></span></h3>
+		</div>
+		</div>
+
+		<div class="col-sm-6">
+		<div class="index-section" style="height: 300px">
+			<div class="status-box">
+				<h4>Status <span id="time_updated" class="h6"></span></h4>
+				<p></p>
+				<p>Lights: <input id="lightSwitch" type="checkbox" data-off-text="OFF" data-on-text="ON" class="lightSwitch" data-size="mini"></p>
+				<p>Illuminance: <span id="lux_reading"></span> lux</p>
+				<p><button id="refresh_status" class="btn btn-xs btn-default">Refresh</button>
+				
+			</div>
+		</div>
+		</div>
+		<div class="col-sm-6">
+		<div class="index-section" style="height: 300px;">
+			<div class="status-box">
+				<h4>Settings</h4>
+				<form class="form-inline" method="post" action="{% url 'user_login' %}">
+				{% csrf_token %}
+
+					<p></p>
+					
+					<p>Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value=""></p>
+					
+					<p>Min. Illuminance Threshold: <span id="lux_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" placeholder="Min. Illuminance Threshold" value=""></p>
+					<p>Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 1000 }' title="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works." value=""></p>
+					<button type="button" id="refresh_settings" class="btn btn-xs btn-default">Refresh</button>
+					<button type="button" id="change_settings" class="btn btn-xs btn-default">Change Settings</button>
+<!-- 					<button type="button" class="btn btn-primary btn-xs btn-rnd change-settings hidden" data-placement="bottom" data-toggle="popover" title="Changing Control Set Points" data-content="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">?</button> -->
+					<button type="submit" id="submit_settings" class="btn btn-xs btn-primary change-settings hidden">Submit</button>
+				</form>
 			</div>
 		</div>
 		</div>
@@ -37,8 +68,12 @@
 	
 	<div class="row">
 		<div class="col-sm-12">
-		<div class="index-section" style="min-height: 400px;">
-			<h4>My office controls:</h4>
+		<div class="index-section">
+			<h3>Energy Consumption: <span><button id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span></h3>
+			<div id="charts" class="hidden">
+			<h4>Room {{ user_profile.room }} | Energy Consumption of Lighting (in hours) for the past week:</h4>
+			<canvas id="myChart" style="height: 250px; width: 100%"></canvas>
+			</div>
 		</div>
 		</div>
 	</div>
@@ -66,6 +101,7 @@
 	}
 });
 </script>
+<script src="{% static 'occ_survey/bootstrap/js/bootstrap-switch.min.js' %}"></script>
 <!-- Chart.js scripts -->
 <script src="{% static 'occ_survey/js/Chart.js' %}"></script>
 <script src="{% static 'occ_survey/js/Chart.Scatter.js' %}"></script>
