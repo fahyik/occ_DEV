@@ -6,7 +6,7 @@ var lux;
 
 // define get_status function to collect status data for room, attach to "refresh" button, display in page
 var refresh = function(){
-	$.get( "/get_status", function(data) {
+	$.get( url_get_status, function(data) {
 		lightstate = data.res.lights;
 		lux = data.res.lux;
 		room = data.res.room;
@@ -23,7 +23,7 @@ var refresh = function(){
 
 // define get_status function to collect status data for room, attach to "refresh" button, display in page
 var refreshSetPoints = function(){
-	$.get( "/get_status", function(data) {
+	$.get( url_get_status, function(data) {
 		// update values in page html
 		$("#lux_th").empty().append(data.res2.lux_th);
 		$("#lux_th_new").attr("value", data.res2.lux_th);
@@ -56,7 +56,8 @@ var updateLightSwitch = function(){
 
 
 $(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip({html:true});
+
+	$('[data-toggle="tooltip"]').tooltip({html:true, trigger:"hover"});
 	$('[data-toggle="popover"]').popover({html:true});
 	
 	//call get_status
@@ -91,6 +92,8 @@ $(document).ready(function(){
 	$("#db_toggle_charts").click(function(){
 
 		$("#charts").toggleClass("hidden");
+		$("#selected_room").toggleClass("hidden");
+		
 		if ( $(this).html() == "Show") {
 			// call script to plot chart
 			$.getScript(url_charts, function(){
@@ -99,7 +102,8 @@ $(document).ready(function(){
 		}
 		else {
 			$(this).text("Show");
-			$("#daily_consumption").empty();
+			$("#myChart").remove();
+			$("#charts").append('<canvas id="myChart" style="height: 250px; width: 100%"></canvas>');
 		}
 		
 	});
@@ -109,13 +113,21 @@ $(document).ready(function(){
 	$("#lightSwitch").on('switchChange.bootstrapSwitch', function(event,state) {
 		if (state) {
 			$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
+			$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web");
 			alert("Lights has been switched on!");
-			refresh();
+			var myVar = setTimeout(function(){
+					refresh();
+					console.log("refresh");
+				},2000);
 		}
 		else if (!state) {
 			$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
+			$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web");
 			alert("Lights has been switched off!");
-			refresh();
+			var myVar = setTimeout(function(){
+					refresh();
+					console.log("refresh");
+				},2000);
 		}
 	});
 });

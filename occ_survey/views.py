@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import json
-from .mail.exp_mail import startmail
+from .mail.exp_mail import *
 # Create your views here.
 
 def index(request):
@@ -161,6 +161,12 @@ def dashboard(request, username):
 def chart_daily_consumption(request):
 	user_profile = UserProfile.objects.get(user=request.user)
 	room = user_profile.room.lower().replace(".", "_")
+	
+	if "room" in request.GET:
+		if request.GET["room"]:
+			room = request.GET["room"]
+
+	
 	#for debug test other rooms
 	#room = "g32_2"
 	today = datetime.date.today()
@@ -177,7 +183,6 @@ def chart_daily_consumption(request):
 		lighting_list = lighting_list.filter(**{room: 1})
 		consumption = round(len(lighting_list)/60.0, 2)
 		data["consumption"].append(consumption)
-	#data["consumption"].append(round(len(LogLighting.objects.filter(time__year=year).filter(time__month=month).filter(time__day=day-i).filter(**{room: 1}))/60.0, 2))	
 		if i == 0 :
 			data["dates"].append("Today")
 		else:
@@ -194,11 +199,11 @@ def buttons(request):
 	return render(request, 'occ_survey/buttons.html', {})
 
 def mail(request):
-	user_list = User.objects.all()
+	user_list = UserProfile.objects.filter(profile_isDone=0)
 	text = []
-	for user in user_list:
-		startmail(user)
-		text.append(user.email)
+	for each in user_list:
+		reminderMail(each.user)
+		text.append(each.user.email)
 	return HttpResponse(json.dumps(text))
 
 #view to extract live status from db, needs to pass GET with room

@@ -55,9 +55,9 @@
 					<p>Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value=""></p>
 					
 					<p>Min. Illuminance Threshold: <span id="lux_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" placeholder="Min. Illuminance Threshold" value=""></p>
-					<p>Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 1000 }' title="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works." value=""></p>
+					<p>Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" value=""></p>
 					<button type="button" id="refresh_settings" class="btn btn-xs btn-default">Refresh</button>
-					<button type="button" id="change_settings" class="btn btn-xs btn-default">Change Settings</button>
+					<button type="button" id="change_settings" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-delay= '{ "show": 100, "hide": 1000 }' title="This will allow you to override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">Change Settings</button>
 <!-- 					<button type="button" class="btn btn-primary btn-xs btn-rnd change-settings hidden" data-placement="bottom" data-toggle="popover" title="Changing Control Set Points" data-content="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">?</button> -->
 					<button type="submit" id="submit_settings" class="btn btn-xs btn-primary change-settings hidden">Submit</button>
 				</form>
@@ -69,9 +69,33 @@
 	<div class="row">
 		<div class="col-sm-12">
 		<div class="index-section">
-			<h3>Energy Consumption: <span><button id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span></h3>
+			<div class="form-inline">
+			<h3>Energy Consumption: 
+			<span>
+				<select id="selected_room" class="form-control">
+					<option value="" selected>--Select a Room--</option>
+					<option value="g22">G22</option>
+					<option value="g23">G23</option>
+					<option value="g24">G24</option>
+					<option value="g25_1">G25.1</option>
+					<option value="g25_2">G25.2</option>
+					<option value="g26_1">G26.1</option>
+					<option value="g26_2">G26.2</option>
+					<option value="g31_1">G31.1</option>
+					<option value="g31_2">G31.2</option>
+					<option value="g32_1">G32.1</option>
+					<option value="g32_2">G32.2</option>
+					<option value="rpi_0">RPi_0</option>
+				</select>
+			</form>
+			<span><button type="button" id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span>
+			</h3>
+			</div>
+			
+			
+			
 			<div id="charts" class="hidden">
-			<h4>Room {{ user_profile.room }} | Energy Consumption of Lighting (in hours) for the past week:</h4>
+			<h4>Room <span id="chart_room"></span> | Energy Consumption of Lighting (in hours) for the past week:</h4>
 			<canvas id="myChart" style="height: 250px; width: 100%"></canvas>
 			</div>
 		</div>
@@ -87,19 +111,11 @@
 
 {% block script_block %}
 <script>
-	// url called in ajax_get_script in dashboard.js 
+	// url called in ajax_get_script in dashboard.js
+	var default_room = "{{ user_profile.room }}"; 
 	var url_charts = "{% static 'occ_survey/js/charts.js' %}";
-	// data for charts, ajax get-json from backend
-	var data_db;
-	$.ajax({
-	async: true,
-	url: "{% url 'occ_survey:chart_cons' %}",
-	type: 'GET',
-	dataType: 'json', // added data type
-	success: function(res) {
-		data_db = res;
-	}
-});
+	var url_get_status = "{% url 'get_status' %}";
+	var url_get_chart_data = "{% url 'occ_survey:chart_cons' %}";
 </script>
 <script src="{% static 'occ_survey/bootstrap/js/bootstrap-switch.min.js' %}"></script>
 <!-- Chart.js scripts -->
