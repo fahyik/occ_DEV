@@ -124,3 +124,8 @@ table.table-choices, table.table-choices td {
 .panel {
 	box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 }
+
+#about-control {
+	position: relative;
+	top: -50px;
+}

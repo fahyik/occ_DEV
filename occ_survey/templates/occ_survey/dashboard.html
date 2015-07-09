@@ -52,13 +52,16 @@
 
 					<p></p>
 					
-					<p>Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value=""></p>
+					<p>Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value="" data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 1000 }' title="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}#about-control' target='_blank'>About</a> for more details on how the control works."></p>
 					
 					<p>Min. Illuminance Threshold: <span id="lux_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" placeholder="Min. Illuminance Threshold" value=""></p>
 					<p>Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" value=""></p>
 					<button type="button" id="refresh_settings" class="btn btn-xs btn-default">Refresh</button>
+<<<<<<< HEAD
 					<button type="button" id="change_settings" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-delay= '{ "show": 100, "hide": 1000 }' title="This will allow you to override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">Change Settings</button>
 <!-- 					<button type="button" class="btn btn-primary btn-xs btn-rnd change-settings hidden" data-placement="bottom" data-toggle="popover" title="Changing Control Set Points" data-content="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">?</button> -->
+=======
+>>>>>>> b3bab59c0b7a5281ec4971e27dd73cdb4b217481
 					<button type="submit" id="submit_settings" class="btn btn-xs btn-primary change-settings hidden">Submit</button>
 				</form>
 			</div>
