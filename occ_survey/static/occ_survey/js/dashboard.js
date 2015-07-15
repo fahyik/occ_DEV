@@ -3,7 +3,6 @@ var lightstate;
 var room;
 var lux;
 
-
 // define get_status function to collect status data for room, attach to "refresh" button, display in page
 var refresh = function(){
 	$.get( url_get_status, function(data) {
@@ -77,7 +76,7 @@ $(document).ready(function(){
 	
 	//change settings button
 	$("#change_settings").click(function(){
-		console.log("show change settings");
+		console.log("toggle change settings view");
 		$(".change-settings").toggleClass("hidden");
 		if ( $(this).html() == "Change Settings") {
 			// call script to plot chart
@@ -111,23 +110,30 @@ $(document).ready(function(){
 	
 	// light switch
 	$("#lightSwitch").on('switchChange.bootstrapSwitch', function(event,state) {
+		$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
+		$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web"+"&user="+username);
+		$.get(url_remote + "?switch=true&user=" + username, function(data) {
+			console.log(data);
+			console.log(url_remote + "?switch=true&user=" + username);
+		});
+		
 		if (state) {
-			$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
-			$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web");
 			alert("Lights has been switched on!");
-			var myVar = setTimeout(function(){
-					refresh();
-					console.log("refresh");
-				},2000);
 		}
 		else if (!state) {
-			$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
-			$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web");
 			alert("Lights has been switched off!");
-			var myVar = setTimeout(function(){
-					refresh();
-					console.log("refresh");
-				},2000);
 		}
+		
+		var myVar = setTimeout(function(){
+				refresh();
+				console.log("refresh");
+			},2000);
+	});
+	
+	$("#submit_settings").click(function(){
+		//submit new settings as POST request
+		console.log("submit new settings");
+		$("#refresh_settings").trigger("click");
+		$("#change_settings").trigger("click");
 	});
 });

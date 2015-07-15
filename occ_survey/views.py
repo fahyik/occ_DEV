@@ -162,8 +162,8 @@ def chart_daily_consumption(request):
 	user_profile = UserProfile.objects.get(user=request.user)
 	room = user_profile.room.lower().replace(".", "_")
 	
-	if "room" in request.GET:
-		if request.GET["room"]:
+	if "room" in request.GET: #if room exists in GET
+		if request.GET["room"]: #if room is not empty
 			room = request.GET["room"]
 
 	
@@ -240,7 +240,18 @@ def get_status(request):
 	}
 	return HttpResponse(json.dumps(data, sort_keys=True))
 
-
+def remote(request):
+	if request.method == "GET":
+		if "switch" in request.GET:
+			user_profile = UserProfile.objects.get(user=request.user)
+			user_profile.remote_switch_count += 1
+			user_profile.save()
+			return HttpResponse("switched from remote")
+		
+		return HttpResponse("no changes")
+		
+	elif request.method =="POST":
+		return HttpResponse("change settings")
 
 
 

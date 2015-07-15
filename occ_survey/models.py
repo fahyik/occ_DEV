@@ -70,7 +70,8 @@ class UserProfile(models.Model):
 	control_isDone = models.IntegerField(default=0)
 	impromptu_count = models.IntegerField(default=0)
 	
-	remote_use_count = models.IntegerField(default=0)
+	remote_switch_count = models.IntegerField(default=0)
+	remote_change_count = models.IntegerField(default=0)
 	
 	def save(self, *args, **kwargs):
 		self.username = self.user.username

@@ -117,6 +117,8 @@
 	var url_charts = "{% static 'occ_survey/js/charts.js' %}";
 	var url_get_status = "{% url 'get_status' %}";
 	var url_get_chart_data = "{% url 'occ_survey:chart_cons' %}";
+	var url_remote = "{% url 'remote' %}";
+	var username = "{{ user.username }}";
 </script>
 <script src="{% static 'occ_survey/bootstrap/js/bootstrap-switch.min.js' %}"></script>
 <!-- Chart.js scripts -->
