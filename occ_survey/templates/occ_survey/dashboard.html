@@ -52,16 +52,16 @@
 
 					<p></p>
 					
-					<p>Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value="" data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 1000 }' title="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}#about-control' target='_blank'>About</a> for more details on how the control works."></p>
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights after this amount of inactivity.">Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" placeholder="Min. Time Delay" value="" ></p>
 					
-					<p>Min. Illuminance Threshold: <span id="lux_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" placeholder="Min. Illuminance Threshold" value=""></p>
-					<p>Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" value=""></p>
-					<button type="button" id="refresh_settings" class="btn btn-xs btn-default">Refresh</button>
-					<button type="button" id="change_settings" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="bottom" data-delay= '{ "show": 100, "hide": 1000 }' title="This will allow you to override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}#about-control' target='_blank'>About</a> for more details on how the control works.">Change Settings</button>
-<!-- 					<button type="button" class="btn btn-primary btn-xs btn-rnd change-settings hidden" data-placement="bottom" data-toggle="popover" title="Changing Control Set Points" data-content="This will override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}' target='_blank'>About</a> for more details on how the control works.">?</button> -->
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch on the lights when the illuminance falls below this value.">Min. Illuminance Threshold: <span id="lux_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" placeholder="Min. Illuminance Threshold" value="" ></p>
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights when the illuminance goes above this value.">Max. Illuminance Threshold: <span id="upp_th"></span> lux <input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" placeholder="Max. Illuminance Threshold" value="" ></p>
+				</form>	
 
-					<button type="submit" id="submit_settings" class="btn btn-xs btn-primary change-settings hidden">Submit</button>
-				</form>
+				<button type="button" id="refresh_settings" class="btn btn-default btn-xs">Refresh</button>
+				<button type="button" id="change_settings" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" data-delay= '{ "show": 100, "hide": 1000 }' title="This will allow you to override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}#about-control' target='_blank'>About</a> for more details on how the control works.">Change Settings</button>
+				&nbsp;<button type="button" id="submit_settings" class="btn btn-primary btn-xs change-settings hidden">Submit</button>
+				
 			</div>
 		</div>
 		</div>
