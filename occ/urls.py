@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^user_logout/$', user_logout, name="user_logout"),
     url(r'^get_status/$', get_status, name="get_status"),
     url(r'^remote/$', remote, name="remote"),
+    url(r'^update_set_points/$', update_set_points, name="update_set_points"),
 ]

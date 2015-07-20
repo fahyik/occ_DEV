@@ -203,3 +203,28 @@ class ControlLuxWLights(models.Model):
     class Meta:
         managed = False
         db_table = 'control_lux_w_lights'
+        
+class Structure(models.Model):
+    name = models.TextField(blank=True, null=True)
+    room = models.TextField(blank=True, null=True)
+    location = models.TextField(blank=True, null=True)
+    ip = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'structure'
+        
+class ControlSetPoints(models.Model):
+	
+	date_updated = models.DateTimeField(auto_now=True)
+	room = models.CharField(max_length=20)
+	lux_th = models.IntegerField(default = 0)
+	upp_th = models.IntegerField(default = 0)
+	td = models.IntegerField(default = 0)
+	override = models.IntegerField(default = 0)
+		
+	def __unicode__(self):
+		return self.room
+	
+	class Meta:
+		db_table = "control_set_points"

@@ -132,6 +132,13 @@ $(document).ready(function(){
 	
 	$("#submit_settings").click(function(){
 		//submit new settings as POST request
+		console.log($("#change-settings-form").serialize());
+		post_data = $("#change-settings-form").serializeArray();
+		console.log($("#change-settings-form").serializeArray());
+		$.post(url_remote, post_data, function(data){
+			console.log(data);
+		});
+		
 		console.log("submit new settings");
 		$("#refresh_settings").trigger("click");
 		$("#change_settings").trigger("click");

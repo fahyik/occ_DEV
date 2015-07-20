@@ -206,7 +206,7 @@ def mail(request):
 		text.append(each.user.email)
 	return HttpResponse(json.dumps(text))
 
-#view to extract live status from db, needs to pass GET with room
+#view to extract live status from db, needs to pass room name with GET
 def get_status(request):
 	if request.GET:
 		room = request.GET["room"].lower().replace(".", "_")
@@ -250,9 +250,30 @@ def remote(request):
 		
 		return HttpResponse("no changes")
 		
-	elif request.method =="POST":
-		return HttpResponse("change settings")
+	elif request.method == "POST":
+		request.POST["td_setting_new"]
+		request.POST["lux_th_new"]
+		request.POST["upp_th_new"]
+		request.POST["room"]
+		return HttpResponse("change settings POST success")
 
+def update_set_points(request):
+	room_list = Structure.objects.values_list("room", flat=True)
+	for room in room_list:
+		#get current set points for each room
+		setpoints = ControlSetPoints.objects.get(room=room)
+		#only update set points if there is NO override
+		if setpoints.override == 0:
+			room = room.lower().replace(".", "_")
+			td = ControlTd1.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			lux_th = ControlLuxThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			upp_th = ControlLuxUpperThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			setpoints.td = td
+			setpoints.lux_th = lux_th
+			setpoints.upp_th = upp_th
+			setpoints.save()
+	
+	return HttpResponse("update set points Successful")
 
 
 
