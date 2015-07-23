@@ -228,3 +228,34 @@ class ControlSetPoints(models.Model):
 	
 	class Meta:
 		db_table = "control_set_points"
+
+class ControlChanges(models.Model):
+	
+	date = models.DateTimeField(default=datetime.datetime.now)
+	room = models.CharField(max_length=20)
+	lux_th_new = models.IntegerField(default = 0)
+	upp_th_new = models.IntegerField(default = 0)
+	td_new = models.IntegerField(default = 0)
+	lux_th = models.IntegerField(default = 0)
+	upp_th = models.IntegerField(default = 0)
+	td = models.IntegerField(default = 0)
+		
+	def __unicode__(self):
+		return self.room
+	
+	class Meta:
+		db_table = "control_changes"
+		
+class ControlAdjustments(models.Model):
+	
+	date_updated = models.DateTimeField(auto_now=True)
+	room = models.CharField(max_length=20)
+	lux_th = models.IntegerField(default = 0)
+	upp_th = models.IntegerField(default = 0)
+	td = models.IntegerField(default = 0)
+		
+	def __unicode__(self):
+		return self.room
+	
+	class Meta:
+		db_table = "control_adjustments"

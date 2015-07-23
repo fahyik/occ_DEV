@@ -2,6 +2,7 @@
 var lightstate;
 var room;
 var lux;
+var clicked = false;
 
 // define get_status function to collect status data for room, attach to "refresh" button, display in page
 var refresh = function(){
@@ -10,12 +11,13 @@ var refresh = function(){
 		lux = data.res.lux;
 		room = data.res.room;
 		time = data.res.time;
-		console.log(lightstate, lux, room, time);
+		//console.log(lightstate, lux, room, time);
 		// update values in page html
 		$("#lux_reading").empty().append(lux);
 		$("#time_updated").empty().append("updated: "+time);
 		// updateLightSwitch
 		updateLightSwitch();
+
 		
 	}, "json");
 }
@@ -37,7 +39,7 @@ var refreshSetPoints = function(){
 // define function to update lightswitch
 var updateLightSwitch = function(){
 	lightbool = lightstate > 0 ? true : false;
-	console.log(lightbool,lightstate,room,lux);
+	//console.log(lightbool,lightstate,room,lux);
 	
 	//button starts off with no checked option;
 	if (lightstate == 1) {
@@ -45,14 +47,27 @@ var updateLightSwitch = function(){
 	}
 	
 	$("#lightSwitch").bootstrapSwitch('state',lightbool);
+	
+	//to disable light switch if lightstate is -2, i.e. dS not working.
 	if (lightstate >= 0) {
 		$("#lightSwitch").bootstrapSwitch('disabled', false);
 	}
 	else {
 		$("#lightSwitch").bootstrapSwitch('disabled', true);
 	}
+	clicked = false;
 }
 
+var getOverride = function() {
+	$.get( url_get_override_status+"?room="+default_room, function(data) {
+		if (data.override == 1) {
+			$("#override_status").removeClass("hidden");
+		} else {
+		
+		}
+		
+	}, "json");	
+}
 
 $(document).ready(function(){
 
@@ -62,21 +77,27 @@ $(document).ready(function(){
 	//call get_status
 	refresh();
 	refreshSetPoints();
+	getOverride();
+
 	
 	//refresh button
 	$("#refresh_status").click(function(){
+		clicked = true;
+		console.log("refresh status");
 		refresh();
 	});
 	
 	//refresh settings
 	$("#refresh_settings").click(function(){
 		refreshSetPoints();
+		getOverride();
 		console.log("refresh settings");
 	});
 	
 	//change settings button
 	$("#change_settings").click(function(){
 		console.log("toggle change settings view");
+		$("#refresh_settings").trigger("click");
 		$(".change-settings").toggleClass("hidden");
 		if ( $(this).html() == "Change Settings") {
 			// call script to plot chart
@@ -110,37 +131,61 @@ $(document).ready(function(){
 	
 	// light switch
 	$("#lightSwitch").on('switchChange.bootstrapSwitch', function(event,state) {
-		$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
-		$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web"+"&user="+username);
-		$.get(url_remote + "?switch=true&user=" + username, function(data) {
-			console.log(data);
-			console.log(url_remote + "?switch=true&user=" + username);
-		});
+		if (clicked) {
+			clicked = false;
+			console.log("switch changed, but not by click, no action");
+		} else {
+			console.log("switched");
+			$.get("http://129.132.32.187/lights.php/?state="+(+state)+"&room="+room);
+			$.get("http://129.132.32.187/trigger_push_button.php/?state="+(+state)+"&room="+room+"&origin=web"+"&user="+username);
+			$.get(url_remote + "?switch=true&user=" + username, function(data) {
+				console.log(data);
+				console.log(url_remote + "?switch=true&user=" + username);
+			});
+			
+			if (state) {
+				alert("Lights has been switched on!");
+			}
+			else if (!state) {
+				alert("Lights has been switched off!");
+			}
 		
-		if (state) {
-			alert("Lights has been switched on!");
-		}
-		else if (!state) {
-			alert("Lights has been switched off!");
-		}
-		
-		var myVar = setTimeout(function(){
-				refresh();
-				console.log("refresh");
-			},2000);
+			var myVar = setTimeout(function(){
+					refresh();
+					console.log("refresh");
+				},2000);
+			}
+
 	});
+	
 	
 	$("#submit_settings").click(function(){
 		//submit new settings as POST request
 		console.log($("#change-settings-form").serialize());
-		post_data = $("#change-settings-form").serializeArray();
-		console.log($("#change-settings-form").serializeArray());
+		var post_data = $("#change-settings-form").serializeArray();
+
 		$.post(url_remote, post_data, function(data){
-			console.log(data);
-		});
+			console.log(data.success);
+			if (data.error) {
+				alert(data.error)
+			}
+			$("#refresh_settings").trigger("click");
+		},"json");
 		
 		console.log("submit new settings");
-		$("#refresh_settings").trigger("click");
 		$("#change_settings").trigger("click");
+	});
+	
+	//disable override
+	$("#override").click(function(){
+		console.log("disable override");
+		$("#override_status").addClass("hidden");
+		var post_data = $("#override-form").serializeArray();
+		console.log(post_data);
+		$.post(url_get_override_status, post_data, function(data){
+			console.log(data);
+			$("#refresh_settings").trigger("click");
+		});
+	
 	});
 });

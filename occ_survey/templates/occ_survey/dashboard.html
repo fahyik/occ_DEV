@@ -47,7 +47,7 @@
 		<div class="index-section" style="height: 300px;">
 			<div class="status-box">
 				<h4>Settings</h4>
-				<form id="change-settings-form" class="form-inline" method="post" action="{% url 'user_login' %}">
+				<form id="change-settings-form" class="form-inline" method="post" action="">
 				{% csrf_token %}
 
 					<p></p>
@@ -66,6 +66,15 @@
 				<button type="button" id="refresh_settings" class="btn btn-default btn-xs">Refresh</button>
 				<button type="button" id="change_settings" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" data-delay= '{ "show": 100, "hide": 1000 }' title="This will allow you to override the control set points.<br>Do not change anything if you do not know what you are doing.<br>Refer to <a href='{% url 'about' %}#about-control' target='_blank'>About</a> for more details on how the control works.">Change Settings</button>
 				&nbsp;<button type="button" id="submit_settings" class="btn btn-primary btn-xs change-settings hidden">Submit</button>
+				<br/><br/>
+				<div id = "override_status" class="hidden">
+					<p style="color: #DB6480;">User Override is currently Active!</p>
+					<form id="override-form">
+						{% csrf_token %}
+						<button type="button" id="override" class="btn btn-danger btn-sm">Click here to disable override and return to default settings.</button>
+						<input type="text" class="hidden" name="room" value="{{ user_profile.room }}">
+					</form>
+				</div>
 				
 			</div>
 		</div>
@@ -121,6 +130,7 @@
 	var default_room = "{{ user_profile.room }}"; 
 	var url_charts = "{% static 'occ_survey/js/charts.js' %}";
 	var url_get_status = "{% url 'get_status' %}";
+	var url_get_override_status = "{% url 'get_override_status' %}";
 	var url_get_chart_data = "{% url 'occ_survey:chart_cons' %}";
 	var url_remote = "{% url 'remote' %}";
 	var username = "{{ user.username }}";

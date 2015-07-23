@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-import json
+import json, datetime
 from .mail.exp_mail import *
 # Create your views here.
 
@@ -216,13 +216,14 @@ def get_status(request):
 		room = user_profile.room.lower().replace(".", "_")
 		room2 = user_profile.room
 	
-	time = LogLighting.objects.values_list("time", flat=True).order_by('-id')[:1][0]
+	time = datetime.datetime.now()
 	lights = LogLighting.objects.values_list(room, flat=True).order_by('-id')[:1][0]
 	lux = LogLux.objects.values_list(room, flat=True).order_by('-id')[:1][0]
 	
-	td = ControlTd1.objects.values_list(room, flat=True).order_by('-id')[:1][0]
-	lux_th = ControlLuxThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
-	upp_th = ControlLuxUpperThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+	setpoints = ControlSetPoints.objects.get(room=room2) 
+	td = setpoints.td
+	lux_th = setpoints.lux_th
+	upp_th = setpoints.upp_th
 	
 	data = {
 		"ok": True,
@@ -251,12 +252,79 @@ def remote(request):
 		return HttpResponse("no changes")
 		
 	elif request.method == "POST":
-		request.POST["td_setting_new"]
-		request.POST["lux_th_new"]
-		request.POST["upp_th_new"]
-		request.POST["room"]
-		return HttpResponse("change settings POST success")
-
+		#post the changes into control_changes and run sort control_adjustments
+		err_msg = ""
+		room = request.POST["room"]
+		room2 = request.POST["room"].lower().replace(".", "_")
+		td_new = int(request.POST["td_setting_new"])
+		lux_th_new = int(request.POST["lux_th_new"])
+		upp_th_new = int(request.POST["upp_th_new"])
+		setpoints = ControlSetPoints.objects.get(room=room)
+		luxWLights = ControlLuxWLights.objects.values_list(room2, flat=True).order_by('-id')[:1][0]
+		
+		#make sure new values respect the original difference which is luxWLights
+		del_lux_th = lux_th_new - setpoints.lux_th
+		del_upp_th = upp_th_new - setpoints.upp_th
+		del_th = upp_th_new - lux_th_new
+		
+		#first check if del_th < luxWLights
+		if (del_th < luxWLights):		
+			#del_upp_th has to be larger or equal than del_lux_th
+			if (del_upp_th < del_lux_th):
+				#if delta upp th is smaller, then set delta upp th to delta lux th and change upp_th_new
+				del_upp_th = del_lux_th
+				upp_th_new = del_upp_th + setpoints.upp_th
+				err_msg = "The difference between the your new min. illuminance threshold and max. illuminance threshold is too small. It has been automatically changed for you."
+		
+		
+		#insert new changes object
+		changes = ControlChanges(room=room)
+		# new set points
+		changes.lux_th_new = lux_th_new
+		changes.upp_th_new = upp_th_new
+		changes.td_new = td_new
+		# current set points at time of change
+		changes.lux_th = setpoints.lux_th
+		changes.upp_th = setpoints.upp_th
+		changes.td = setpoints.td
+		changes.save()
+		
+		#update current setpoints
+ 		setpoints.td = td_new
+ 		setpoints.lux_th = lux_th_new
+ 		setpoints.upp_th = upp_th_new
+ 		setpoints.override = 1
+ 		setpoints.save()
+ 		
+		#update adjustments
+		adj = ControlAdjustments.objects.get(room=room)
+		change_list = ControlChanges.objects.filter(room=room)
+		sum_lux = 0
+		sum_upp = 0
+		sum_td = 0
+		size = len(change_list)
+		for each in change_list:
+			sum_lux += each.lux_th_new - each.lux_th
+			sum_upp += each.upp_th_new - each.upp_th
+			sum_td += each.td_new - each.td	
+		# save adjustment as mean of all previous adjustments
+		adj.lux_th = sum_lux / size
+		adj.upp_th = sum_upp / size
+		adj.td = sum_td / size
+		adj.save()
+		
+		user_profile = UserProfile.objects.get(user=request.user)
+		user_profile.remote_change_count += 1
+		user_profile.save()
+		
+		postreturn = {
+			"success": "success",
+			"error": err_msg,
+		}
+		
+		return HttpResponse(json.dumps(postreturn))
+     	
+#called together with control_adapt to update set points in control_set_points
 def update_set_points(request):
 	room_list = Structure.objects.values_list("room", flat=True)
 	for room in room_list:
@@ -272,11 +340,35 @@ def update_set_points(request):
 			setpoints.lux_th = lux_th
 			setpoints.upp_th = upp_th
 			setpoints.save()
+		elif setpoints.override == 1:
+			#add to current set points the changes linearly
+			adj = ControlAdjustments.objects.get(room=room)
+			setpoints.lux_th += adj.lux_th
+			setpoints.upp_th += adj.upp_th
+			setpoints.td += adj.td
+			setpoints.save()
 	
 	return HttpResponse("update set points Successful")
 
-
-
+def get_override_status(request):
+	if request.method == "GET":
+		room = request.GET["room"]
+		setpoints = ControlSetPoints.objects.get(room=room)
+		override = setpoints.override
+	
+		data = {
+			"override": override,
+		}
+	
+		return HttpResponse(json.dumps(data))
+	
+	elif request.method == "POST":
+		setpoints = ControlSetPoints.objects.get(room=request.POST["room"])
+		setpoints.override = 0
+		setpoints.save()
+		update_set_points(request)
+		
+		return HttpResponse("disable")
 
 		
 		
