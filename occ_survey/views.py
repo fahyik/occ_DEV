@@ -262,6 +262,21 @@ def remote(request):
 		setpoints = ControlSetPoints.objects.get(room=room)
 		luxWLights = ControlLuxWLights.objects.values_list(room2, flat=True).order_by('-id')[:1][0]
 		
+		#boundaries
+		if upp_th_new > 1500:
+			upp_th_new = 1500
+		
+		if lux_th_new > 500:
+			lux_th_new = 500
+		
+		if lux_th_new < 0:
+			lux_th_new = 0
+		
+		if td_new < 0:
+			td_new = 1
+		elif td_new > 15:
+			td_new = 15
+		
 		#make sure new values respect the original difference which is luxWLights
 		del_lux_th = lux_th_new - setpoints.lux_th
 		del_upp_th = upp_th_new - setpoints.upp_th

@@ -52,14 +52,14 @@
 
 					<p></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights after this amount of inactivity.">Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins 
-					<input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" name="td_setting_new" placeholder="Min. Time Delay" value="" ></p>
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights after this amount of inactivity. Value between 1 and 15.">Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins 
+					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" name="td_setting_new" placeholder="Min. Time Delay" value="" ></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch on the lights when the illuminance falls below this value.">Min. Illuminance Threshold: <span id="lux_th"></span> lux 
-					<input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" name="lux_th_new" placeholder="Min. Illuminance Threshold" value="" ></p>
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch on the lights when the illuminance falls below this value. Value between 0 and 500.">Min. Illuminance Threshold: <span id="lux_th"></span> lux 
+					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" name="lux_th_new" placeholder="Min. Illuminance Threshold" value="" ></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights when the illuminance goes above this value.">Max. Illuminance Threshold: <span id="upp_th"></span> lux 
-					<input style="height: 25px; width: 50px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" name="upp_th_new" placeholder="Max. Illuminance Threshold" value="" ></p>
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights when the illuminance goes above this value. Max value of 1500.">Max. Illuminance Threshold: <span id="upp_th"></span> lux 
+					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" name="upp_th_new" placeholder="Max. Illuminance Threshold" value="" ></p>
 					<input type="text" class="hidden" name="room" value="{{ user_profile.room }}">
 				</form>	
 

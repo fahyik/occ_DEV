@@ -27,11 +27,11 @@ var refreshSetPoints = function(){
 	$.get( url_get_status, function(data) {
 		// update values in page html
 		$("#lux_th").empty().append(data.res2.lux_th);
-		$("#lux_th_new").attr("value", data.res2.lux_th);
+		$("#lux_th_new").val(data.res2.lux_th);
 		$("#upp_th").empty().append(data.res2.upp_th);
-		$("#upp_th_new").attr("value", data.res2.upp_th);
+		$("#upp_th_new").val(data.res2.upp_th);
 		$("#td_setting").empty().append(data.res2.td);
-		$("#td_setting_new").attr("value", data.res2.td);
+		$("#td_setting_new").val(data.res2.td);
 		
 	}, "json");
 }
