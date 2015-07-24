@@ -203,6 +203,16 @@ class ControlLuxWLights(models.Model):
     class Meta:
         managed = False
         db_table = 'control_lux_w_lights'
+
+class LogOccupancy(models.Model):
+    time = models.DateTimeField()
+    room = models.TextField(blank=True, null=True)
+    state = models.IntegerField(blank=True, null=True)
+    dsid = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'log_occupancy'
         
 class Structure(models.Model):
     name = models.TextField(blank=True, null=True)

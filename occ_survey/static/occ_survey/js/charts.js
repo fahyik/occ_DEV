@@ -1,6 +1,61 @@
 var room_selected = $("#selected_room option:selected").val();
 console.log(room_selected, default_room);
 
+google.setOnLoadCallback(drawChart);
+var drawChart = function(data_db) {
+
+	var size = data_db.consumption.length;
+	console.log(data_db.consumption.length);
+
+	// create arrays from data from db
+	var data_set = [];
+	data_set.push(['Day', 'Consumption', 'Consumption per hour occupancy', 'Occupancy']);
+	
+	for (var day = 0; day < size; day++) {
+		data_set.push([data_db.dates[day], data_db.consumption[day], +(data_db.consumption[day]/data_db.occupancy[day]).toFixed(2), data_db.occupancy[day]]);
+	}
+	console.log(data_set);
+	var data = google.visualization.arrayToDataTable(data_set);
+
+	var options = {
+		//title : 'Monthly Coffee Production by Country',
+		//hAxis: {title: "Month"},
+		vAxis: {
+		  title: "Number of Hours",
+		  minValue: 0,
+		  //maxValue: 16,
+		  baselineColor: '#DDD',
+		  gridlines: {
+			color: '#DDD',
+			count: -1,
+		  },
+		  textStyle: {
+			fontSize: 11
+		  },
+		  viewWindowMode: "maximize",
+		},
+		seriesType: "bars",
+		series: {2: {type: "line"}},
+		colors: ['#5da5ca','#97bbcd','#4c5f69'],
+		legend: {
+		  position: 'bottom',
+		  textStyle: {
+			fontSize: 12
+		  }
+		},
+		fontName: 'Open Sans',
+		chartArea: {
+		  left: 50,
+		  top: 10,
+		  width: '100%',
+		  height: '70%'
+		},
+	};
+
+	var chart = new google.visualization.ComboChart(document.getElementById('myChart2'));
+
+	chart.draw(data, options);
+}
 
 $.get( url_get_chart_data, {"room": room_selected}, function(data_db) {
 	
@@ -11,74 +66,8 @@ $.get( url_get_chart_data, {"room": room_selected}, function(data_db) {
 		$("#chart_room").empty().append(default_room);
 	}
 	
-	plot(data_db);
-	
+	drawChart(data_db);
+	$(window).resize(function(){
+		drawChart(data_db);
+	});
 }, "json");
-
-
-var plot = function (data_db) {
-
-	// Get the context of the canvas element we want to select
-	var canvas = document.getElementById("myChart");
-	var ctx = canvas.getContext("2d");
-	Chart.defaults.global.responsive = true;
-	Chart.defaults.global.scaleIntegersOnly = false;
-
-	var size = data_db.consumption.length;
-	console.log(data_db.consumption.length);
-
-	// create arrays from data from db
-	var xlabels = [];
-	var yvalues = [];
-
-	for (var day = 0; day < size; day++) {
-		xlabels.push(data_db.dates[day]);
-		yvalues.push(data_db.consumption[day]);
-	}
-	console.log(yvalues);
-
-// 	var data = {
-// 		labels: xlabels,
-// 		datasets: [
-// 			{
-// 				label: "Energy Consumption",
-// 				fillColor: "rgba(151,187,205,0.2)",
-// 				strokeColor: "rgba(151,187,205,1)",
-// 				pointColor: "rgba(151,187,205,1)",
-// 				pointStrokeColor: "#fff",
-// 				pointHighlightFill: "#fff",
-// 				pointHighlightStroke: "rgba(151,187,205,1)",
-// 				data: yvalues
-// 			},
-// 			// {
-// 	//             label: "My Second dataset",
-// 	//             fillColor: "rgba(151,100,205,0.2)",
-// 	//             strokeColor: "rgba(151,100,205,1)",
-// 	//             pointColor: "rgba(151,100,205,1)",
-// 	//             pointStrokeColor: "#fff",
-// 	//             pointHighlightFill: "#fff",
-// 	//             pointHighlightStroke: "rgba(151,100,205,1)",
-// 	//             data: [2, 4, 4, 1, 8, 2, 9]
-// 	//         }
-// 		]
-// 	};
-// 
-// 	var myLineChart = new Chart(ctx).Line(data, {});
-	
-	// bar chart instead:
-	var data = {
-		labels: xlabels,
-		datasets: [
-			{
-				label: "Energy Consumption",
-				fillColor: "rgba(151,187,205,0.2)",
-				strokeColor: "rgba(151,187,205,1)",
-				HighlightFill: "#fff",
-				HighlightStroke: "rgba(151,187,205,1)",
-				data: yvalues
-			},
-		]
-	};
-
-	var myLineChart = new Chart(ctx).Bar(data, {});
-}

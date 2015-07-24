@@ -85,7 +85,7 @@
 		<div class="col-sm-12">
 		<div class="index-section">
 			<div class="form-inline">
-			<h3>Energy Consumption: 
+			<h3>Statistics: 
 			<span>
 				<select id="selected_room" class="form-control">
 					<option value="" selected>--Select a Room--</option>
@@ -110,9 +110,14 @@
 			
 			
 			<div id="charts" class="hidden">
-			<h4>Room <span id="chart_room"></span> | Energy Consumption of Lighting (in hours) for the past week:</h4>
-			<canvas id="myChart" style="height: 250px; width: 100%"></canvas>
+			<h4>Room <span id="chart_room"></span> | Lighting Energy Consumption and Occupancy* for the past week:</h4>
+			<p style="font-size:12px">*values for occupancy are approximated and may not reflect the actual time of occupancy in the office</p>
+			<br>
+			<div id="myChart2" style="height: 400px; width: 100%"></div>
+			
 			</div>
+			
+			
 		</div>
 		</div>
 	</div>
@@ -125,6 +130,15 @@
 {% endblock %}
 
 {% block script_block %}
+<script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1.1',
+              'packages':['corechart']
+            }]
+          }"></script>
+          
 <script>
 	// url called in ajax_get_script in dashboard.js
 	var default_room = "{{ user_profile.room }}"; 
@@ -136,9 +150,6 @@
 	var username = "{{ user.username }}";
 </script>
 <script src="{% static 'occ_survey/bootstrap/js/bootstrap-switch.min.js' %}"></script>
-<!-- Chart.js scripts -->
-<script src="{% static 'occ_survey/js/Chart.js' %}"></script>
-<script src="{% static 'occ_survey/js/Chart.Scatter.js' %}"></script>
 <!-- js for dashboard.html page -->
 <script src="{% static 'occ_survey/js/dashboard.js' %}"></script>
 {% endblock %}

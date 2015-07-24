@@ -160,29 +160,61 @@ def dashboard(request, username):
 @login_required
 def chart_daily_consumption(request):
 	user_profile = UserProfile.objects.get(user=request.user)
+	room2 = user_profile.room
 	room = user_profile.room.lower().replace(".", "_")
 	
 	if "room" in request.GET: #if room exists in GET
 		if request.GET["room"]: #if room is not empty
-			room = request.GET["room"]
+			room = request.GET["room"] #room is already in small and _
+			if request.GET["room"] == "rpi_0":
+				room2 = "RPi_0"
+			else:
+				room2 = room.upper().replace("_", ".")
 
 	
 	#for debug test other rooms
 	#room = "g32_2"
 	today = datetime.date.today()
 	
-	data = { 
+	data = {
+		"occupancy": [],
 		"consumption": [],
 		"dates": [],
 	}
 	
 	#number of past days to show: default = 7
 	for i in range(0,7) :
+		#lighting consumption:
 		lighting_list = LogLighting.objects.filter(time__gte= (today-datetime.timedelta(i)))
 		lighting_list = lighting_list.filter(time__lt= (today-datetime.timedelta(i-1)))
 		lighting_list = lighting_list.filter(**{room: 1})
 		consumption = round(len(lighting_list)/60.0, 2)
 		data["consumption"].append(consumption)
+		
+		#occupancy:
+		try:
+			first = None
+			last = None
+			first = LogOccupancy.objects.filter(room = room2).filter(state=1).filter(time__gte= (today-datetime.timedelta(i))).filter(time__lt= (today-datetime.timedelta(i-1))).order_by("id")[:1][0].time
+			last = LogOccupancy.objects.filter(room = room2).filter(state=0).filter(time__gte= (today-datetime.timedelta(i))).filter(time__lt= (today-datetime.timedelta(i-1))).order_by("-id")[:1][0].time
+		
+		except:
+			pass
+		
+		if first is not None:
+			print "no first"
+			
+		if last == None:
+			print "no last"
+			
+		if first and last:	
+			time = round( (last-first).seconds/3600.0, 2)
+		else:
+			time = 0
+		
+		data["occupancy"].append(time)
+		
+		#dates:
 		if i == 0 :
 			data["dates"].append("Today")
 		else:
