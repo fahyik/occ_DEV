@@ -1,4 +1,4 @@
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 
 # def mail():
 # 	email = EmailMessage('Lighting Control Experiment', 'Testing email', 'Adaptive System Labs',
@@ -57,7 +57,7 @@ If you have lost the previous email, here are your login credentials again, as f
 	Username: %s
 	Password: %s
 	
-You will also be able to find more details on the experiment on the same web page.
+You will also be able to find <strong>more details</strong> on the experiment on the same web page.
 
 Once again, I will be happy to answer any queries you may have with regards to the experiment.
 Thank you.
@@ -70,6 +70,47 @@ Fah Yik
 				'Adaptive System Labs <asl@ethz.ch>', [],
 				['adaptive.systems.lab.ethz@gmail.com', ],
 				reply_to=['adaptive.systems.lab.ethz@gmail.com'])
+	#email.content_subtype = "html"  # Main content is now text/html
+	email.send()
+	
+	print "send to: "+user.email+" completed!"
+
+def spotMail(user):
+	message = """<p>Dear %s,</p>
+	
+<p>
+the first phase of the experiment is now over. We are now starting with the second phase where we will introduce the control system.</p>
+
+<p>
+We kindly ask that you read this <a href="http://asl-lighting-control.info/main/buttons">link</a> so that you understand how to properly operate the light switch in your office. <strong>This is very important to the function of the control in your office.</strong>
+</p>
+
+<p>
+In this phase of the experiment, you will also be provided a control interface on your personal dashboard, on which you can switch on/off the lights, change the control parameters and see the statistics of light use in your office. Before you attempt to make any changes to the control however, please <a href="http://asl-lighting-control.info/main/about/#about-control">familiarise yourself with the system</a>.<br/>
+<strong>Please do not make any changes if you are not sure.</strong>
+</p>
+
+<p>
+In the meantime, we would like to have you fill out the second questionnaire with regards to your comfort during the first phase. We remind you again that the answers for this questionnaire should be <strong>based only on your experiences during the timeframe of 16 June to 27 July 2015</strong>.<br />
+You can click on the link below to proceed to the questionnaire:<br/>
+http://asl-lighting-control.info/main/survey/survey/comfort
+</p>
+
+<p>I am looking forward to obtaining some interesting results and sharing them with you!</p>
+<p>Once again, I will be happy to answer any queries you may have with regards to the experiment.</p>
+<p>Thank you.</p>
+	
+<p>
+Regards,<br/>
+Fah Yik
+</p>
+""" % (user.first_name)
+
+	email = EmailMessage('Lighting Control Experiment | Phase 2', message, 
+				'Adaptive System Labs <asl@ethz.ch>', ['yongf@ethz.ch'],
+				['adaptive.systems.lab.ethz@gmail.com', ],
+				reply_to=['adaptive.systems.lab.ethz@gmail.com'])
+	email.content_subtype = "html"  # Main content is now text/html
 	email.send()
 	
 	print "send to: "+user.email+" completed!"
