@@ -233,9 +233,10 @@ def buttons(request):
 def mail(request):
 	user_list = UserProfile.objects.filter(profile_isDone=0)
 	text = []
-	for each in user_list:
-		reminderMail(each.user)
-		text.append(each.user.email)
+	spotMail(user_list[0].user)
+# 	for each in user_list:
+# 		reminderMail(each.user)
+# 		text.append(each.user.email)
 	return HttpResponse(json.dumps(text))
 
 #view to extract live status from db, needs to pass room name with GET
@@ -273,6 +274,7 @@ def get_status(request):
 	}
 	return HttpResponse(json.dumps(data, sort_keys=True))
 
+# if request = GET, updates remote switch count, if = POST, updates control set points
 def remote(request):
 	if request.method == "GET":
 		if "switch" in request.GET:

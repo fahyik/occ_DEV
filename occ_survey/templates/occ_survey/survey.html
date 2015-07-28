@@ -48,7 +48,7 @@
 					</tr>
 					{% elif question.choice.type == "open" %}
 					<tr>
-						<td><textarea class="form-control" name="Q{{ forloop.counter }}" placeholder="Text input" rows="3"></textarea></td>
+						<td><textarea class="form-control" name="Q{{ forloop.counter }}" placeholder="your input here.." rows="3"></textarea></td>
 						<input type="hidden" name="Q{{ forloop.counter }}_id" value={{ question.id }}>
 					</tr>
 					{% endif %}

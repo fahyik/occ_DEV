@@ -19,15 +19,17 @@
 				<li><a href="{% url 'occ_survey:survey' 'profile' %}">Complete Profile Questionnaire</a></li>
 				{% endif %}
 			</ul>
+			{% if user_profile.profile_isDone == 1 %}
+			<p>No current tasks.</p>
+			{% endif %}
 		</div>
 		</div>
 	</div>
-	
 	{% if user.username == "admin" or  user.username == "zoltan" %}
 	<div class="row">
 		<div class="col-sm-12">
 		<div class="index-section-head">
-			<h3>My office: <span class="h2">{{ user_profile.room }}</h2></span></h3>
+			<h3>My Controls: <span class="h2">{{ user_profile.room }}</h2></span></h3>
 		</div>
 		</div>
 
@@ -86,6 +88,7 @@
 		<div class="index-section">
 			<div class="form-inline">
 			<h3>Statistics: 
+			{% if user.username == "admin" or  user.username == "zoltan" %}
 			<span>
 				<select id="selected_room" class="form-control">
 					<option value="" selected>--Select a Room--</option>
@@ -102,7 +105,8 @@
 					<option value="g32_2">G32.2</option>
 					<option value="rpi_0">RPi_0</option>
 				</select>
-			</form>
+			</span>
+			{% endif %}
 			<span><button type="button" id="db_toggle_charts" class="btn btn-default btn-sm">Show</button></span>
 			</h3>
 			</div>
@@ -121,8 +125,7 @@
 		</div>
 		</div>
 	</div>
-	{% endif %}
-
+	{% endif %} <!-- end block for controls and chart -->
 	
 
 </div>

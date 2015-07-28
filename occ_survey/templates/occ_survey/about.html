@@ -21,8 +21,12 @@
 			<p><u>Illuminance Threshold</u></p>
 			<p>Likewise, we believe that the illuminance threshold is occupant- or office-specific. For this, we record the illuminance value each time the lights are switched on in the office. The mean or median value is then taken, whichever is lower, as the minimum illuminance threshold. The maximum illuminance threshold is  calculated by adding the illuminance provided by the artificial lights in the office. These two values are then used to determine if there is sufficient illuminance in the office.</p>
 			<br />
-			<p>The control will determine if the room requires lighting via these two set-points. In short, the lights will be switched on when the room is occupied and there is insufficient illuminance; they will be switched off when the room is unoccupied or when there is too much illuminance.</p>
+			<p>These two set points are calculated at the end of every day. The control will determine if the room requires lighting via these two set-points. In short, the lights will be switched on when the room is occupied and there is insufficient illuminance; they will be switched off when the room is unoccupied or when there is too much illuminance.</p>
 			<p>
+			<br/>
+			<h4>Control Override</h4>
+			<p>User will have the option to manually override the control set points in certain phases of the experiment. Whenever a manual override is executed, the control will act according to these manually set parameters until the next calculation (at the end of every day) or when the manual override is disabled. The differences between the manually set parameters and the automatically generated ones are recorded and used as inputs for subsequent calculations.
+			</p>
         </div>
         
         <div class="index-section">

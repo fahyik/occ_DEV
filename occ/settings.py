@@ -107,3 +107,9 @@ STATIC_ROOT = '/Users/asl/Desktop/fahyik/django/occ_static/'
 #STATIC_URL = 'http://129.132.32.187/static/occ_static/'
 STATIC_URL = '/static/'
 LOGIN_URL = '/user_login/'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "adaptive.systems.lab.ethz"
+EMAIL_HOST_PASSWORD = "asl2013!"
+EMAIL_PORT = 587
