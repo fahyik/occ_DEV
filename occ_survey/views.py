@@ -408,7 +408,7 @@ def get_override_status(request):
 		}
 	
 		return HttpResponse(json.dumps(data))
-	
+	# to disable override
 	elif request.method == "POST":
 		setpoints = ControlSetPoints.objects.get(room=request.POST["room"])
 		setpoints.override = 0
