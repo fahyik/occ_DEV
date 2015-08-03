@@ -192,25 +192,21 @@ def chart_daily_consumption(request):
 		data["consumption"].append(consumption)
 		
 		#occupancy:
+		occupancy = []
 		try:
-			first = None
-			last = None
-			first = LogOccupancy.objects.filter(room = room2).filter(state=1).filter(time__gte= (today-datetime.timedelta(i))).filter(time__lt= (today-datetime.timedelta(i-1))).order_by("id")[:1][0].time
-			last = LogOccupancy.objects.filter(room = room2).filter(state=0).filter(time__gte= (today-datetime.timedelta(i))).filter(time__lt= (today-datetime.timedelta(i-1))).order_by("-id")[:1][0].time
+			occupancy = LogOccupancy.objects.filter(room = room2).filter(time__gte= (today-datetime.timedelta(i))).filter(time__lt= (today-datetime.timedelta(i-1)))
 		
 		except:
 			pass
 		
-		if first is not None:
-			print "no first"
-			
-		if last == None:
-			print "no last"
-			
-		if first and last:	
-			time = round( (last-first).seconds/3600.0, 2)
-		else:
-			time = 0
+		time = 0
+		
+		if occupancy:
+			for j in range(0, len(occupancy)-1):
+				if occupancy[j].state == 1 and occupancy[j+1].state == 0:
+					time += (occupancy[j+1].time - occupancy[j].time).seconds	
+					
+			time = round( time/3600.0, 2)
 		
 		data["occupancy"].append(time)
 		
@@ -392,6 +388,10 @@ def update_set_points(request):
 		elif setpoints.override == 1:
 			#add to current set points the changes linearly
 			adj = ControlAdjustments.objects.get(room=room)
+			room = room.lower().replace(".", "_")
+			setpoints.td = ControlTd1.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			setpoints.lux_th = ControlLuxThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			setpoints.upp_th = ControlLuxUpperThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
 			setpoints.lux_th += adj.lux_th
 			setpoints.upp_th += adj.upp_th
 			setpoints.td += adj.td
