@@ -269,3 +269,37 @@ class ControlAdjustments(models.Model):
 	
 	class Meta:
 		db_table = "control_adjustments"
+
+class LogButton(models.Model):
+    time = models.DateTimeField()
+    room = models.TextField(blank=True, null=True)
+    state = models.IntegerField(blank=True, null=True)
+    lux = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'log_button'
+
+
+class LogControl(models.Model):
+    time = models.DateTimeField()
+    name = models.TextField(blank=True, null=True)
+    ip = models.TextField(blank=True, null=True)
+    room = models.TextField(blank=True, null=True)
+    lux = models.IntegerField(blank=True, null=True)
+    td = models.IntegerField(db_column='TD', blank=True, null=True)  # Field name made lowercase.
+    dt = models.IntegerField(blank=True, null=True)
+    action = models.TextField(blank=True, null=True)
+    occupied = models.IntegerField(blank=True, null=True)
+    dark = models.IntegerField(blank=True, null=True)
+    bright = models.IntegerField(blank=True, null=True)
+    lights = models.IntegerField(blank=True, null=True)
+    buttonontime = models.IntegerField(db_column='buttonOnTime', blank=True, null=True)  # Field name made lowercase.
+    buttonofftime = models.IntegerField(db_column='buttonOffTime', blank=True, null=True)  # Field name made lowercase.
+    trigger = models.TextField(blank=True, null=True)
+    mode = models.IntegerField(blank=True, null=True)
+    timetaken = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'log_control'

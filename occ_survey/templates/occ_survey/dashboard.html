@@ -18,14 +18,17 @@
 				{% if user_profile.profile_isDone == 0 %}
 				<li><a href="{% url 'occ_survey:survey' 'profile' %}">Complete Profile Questionnaire</a></li>
 				{% endif %}
+				{% if user_profile.comfort_isDone == 0 %}
+				<li><a href="{% url 'occ_survey:survey' 'comfort' %}">Complete Comfort Questionnaire</a></li>	
+				{% endif %}
 			</ul>
-			{% if user_profile.profile_isDone == 1 %}
+			{% if user_profile.profile_isDone == 1 and user_profile.comfort_isDone == 1 %}
 			<p>No current tasks.</p>
 			{% endif %}
 		</div>
 		</div>
 	</div>
-	{% if user.username == "admin" or  user.username == "zoltan" %}
+	
 	<div class="row">
 		<div class="col-sm-12">
 		<div class="index-section-head">
@@ -48,19 +51,24 @@
 		<div class="col-sm-6">
 		<div class="index-section" style="height: 300px;">
 			<div class="status-box">
+				{# block for settings #}
+				{% if user_profile.room == "G26.1" or user_profile.room == "G26.2" or user_profile.room == "G31.1" or user_profile.room == "G31.2" %}
+				<h4>Settings</h4>
+				<p>Due to the malfunction of the motion sensors in your office, the control system is at the moment inactive.</p>
+				<p>We are working to resolve the issue.</p>
+
+				{% else %}
 				<h4>Settings</h4>
 				<form id="change-settings-form" class="form-inline" method="post" action="">
 				{% csrf_token %}
-
-					<p></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights after this amount of inactivity. Value between 1 and 15.">Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins 
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights after this amount of inactivity.<br>Value between 1 and 15.">Min. Inoccupancy Time Delay: <span id="td_setting"></span> mins 
 					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="td_setting_new" name="td_setting_new" placeholder="Min. Time Delay" value="" ></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch on the lights when the illuminance falls below this value. Value between 0 and 500.">Min. Illuminance Threshold: <span id="lux_th"></span> lux 
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch on the lights when the illuminance falls below this value.<br>Value between 0 and 500.<br>Set this value to 0 if you want to stop the control from turning the lights on.">Min. Illuminance Threshold: <span id="lux_th"></span> lux 
 					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="lux_th_new" name="lux_th_new" placeholder="Min. Illuminance Threshold" value="" ></p>
 					
-					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights when the illuminance goes above this value. Max value of 1500.">Max. Illuminance Threshold: <span id="upp_th"></span> lux 
+					<p data-toggle="tooltip" data-placement="left" data-delay= '{ "show": 100, "hide": 300 }' title="The control will switch off the lights when the illuminance goes above this value.<br>Max value of 1500.">Max. Illuminance Threshold: <span id="upp_th"></span> lux 
 					<input style="height: 25px; width: 57px; float:right" type="text" class="form-control change-settings hidden" id="upp_th_new" name="upp_th_new" placeholder="Max. Illuminance Threshold" value="" ></p>
 					<input type="text" class="hidden" name="room" value="{{ user_profile.room }}">
 				</form>	
@@ -77,6 +85,7 @@
 						<input type="text" class="hidden" name="room" value="{{ user_profile.room }}">
 					</form>
 				</div>
+				{% endif %}
 				
 			</div>
 		</div>
@@ -125,7 +134,7 @@
 		</div>
 		</div>
 	</div>
-	{% endif %} <!-- end block for controls and chart -->
+	<!-- end block for controls and chart -->
 	
 
 </div>

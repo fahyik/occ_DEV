@@ -75,7 +75,7 @@ Fah Yik
 	
 	print "send to: "+user.email+" completed!"
 
-def spotMail(user):
+def phase2Mail(user):
 	message = """<p>Dear %s,</p>
 	
 <p>
@@ -91,9 +91,16 @@ In this phase of the experiment, you will also be provided a control interface o
 </p>
 
 <p>
-In the meantime, we would like to have you fill out the second questionnaire with regards to your comfort during the first phase. We remind you again that the answers for this questionnaire should be <strong>based only on your experiences during the timeframe of 16 June to 27 July 2015</strong>.<br />
+In the meantime, we would like to have you fill out the second questionnaire with regards to your comfort during the first phase. We remind you again that the answers for this questionnaire should be <strong>based only on your experiences during the timeframe of 22 June to 9 August 2015</strong>.<br />
 You can click on the link below to proceed to the questionnaire:<br/>
-http://asl-lighting-control.info/main/survey/survey/comfort
+<a href="http://asl-lighting-control.info/main/survey/survey/comfort">http://asl-lighting-control.info/main/survey/survey/comfort</a>
+</p>
+
+<p>If you have forgotten your password, here are your login credentials again, as follows:</p>
+	
+<p>	
+Username: %s <br/>
+Password: %s
 </p>
 
 <p>I am looking forward to obtaining some interesting results and sharing them with you!</p>
@@ -104,10 +111,10 @@ http://asl-lighting-control.info/main/survey/survey/comfort
 Regards,<br/>
 Fah Yik
 </p>
-""" % (user.first_name)
+""" % (user.first_name, user.username, user.username)
 
-	email = EmailMessage('Lighting Control Experiment | Phase 2', message, 
-				'Adaptive System Labs <asl@ethz.ch>', ['yongf@ethz.ch'],
+	email = EmailMessage('Lighting Control Experiment | Reminder | Phase 2', message, 
+				'Adaptive System Labs <asl@ethz.ch>', [user.email],
 				['adaptive.systems.lab.ethz@gmail.com', ],
 				reply_to=['adaptive.systems.lab.ethz@gmail.com'])
 	email.content_subtype = "html"  # Main content is now text/html

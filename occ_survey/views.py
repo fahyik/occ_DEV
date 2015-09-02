@@ -227,12 +227,12 @@ def buttons(request):
 	return render(request, 'occ_survey/buttons.html', {})
 
 def mail(request):
-	user_list = UserProfile.objects.filter(profile_isDone=0)
+	user_list = UserProfile.objects.filter(comfort_isDone=0)
 	text = []
-	spotMail(user_list[0].user)
-# 	for each in user_list:
-# 		reminderMail(each.user)
-# 		text.append(each.user.email)
+#	spotMail(user_list[0].user)
+	for each in user_list:
+		phase2Mail(each.user)
+		text.append(each.user.email)
 	return HttpResponse(json.dumps(text))
 
 #view to extract live status from db, needs to pass room name with GET
@@ -343,7 +343,7 @@ def remote(request):
  		
 		#update adjustments
 		adj = ControlAdjustments.objects.get(room=room)
-		change_list = ControlChanges.objects.filter(room=room)
+		change_list = ControlChanges.objects.filter(room=room).filter(date__gte= today-datetime.timedelta(14))
 		sum_lux = 0
 		sum_upp = 0
 		sum_td = 0
@@ -392,9 +392,20 @@ def update_set_points(request):
 			setpoints.td = ControlTd1.objects.values_list(room, flat=True).order_by('-id')[:1][0]
 			setpoints.lux_th = ControlLuxThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
 			setpoints.upp_th = ControlLuxUpperThreshold.objects.values_list(room, flat=True).order_by('-id')[:1][0]
+			lights_lux = setpoints.upp_th - setpoints.lux_th
+
 			setpoints.lux_th += adj.lux_th
+			if setpoints.lux_th < 0:
+				setpoints.lux_th = 0
+
 			setpoints.upp_th += adj.upp_th
+			if setpoints.upp_th < lights_lux:
+				setpoints.lux_th = lights_lux
+
 			setpoints.td += adj.td
+			if setpoints.td <= 0:
+				setpoints.td = 0
+			
 			setpoints.save()
 	
 	return HttpResponse("update set points Successful")
