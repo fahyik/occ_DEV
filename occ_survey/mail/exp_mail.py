@@ -121,3 +121,32 @@ Fah Yik
 	email.send()
 	
 	print "send to: "+user.email+" completed!"
+
+
+def controlMail(user, controlMsg, controlId):
+	message = """<p>Dear %s,</p>
+	
+<p>it seems like the lighting control was not operating to your liking!</p>
+
+<p>%s<br/>You overrode this control action with the light switch.</p>
+
+<p>Click <span><a href="http://asl-lighting-control.info/main/log_button_override/?username=%s&control_id=%s">here</a></span> if you would like the control to remember this action.</p>
+
+
+
+<p>
+Regards,<br/>
+Fah Yik
+</p>
+<br/>
+<a href="http://asl-lighting-control.info/main/unsub/?username=%s" style="font-size: 10px; color: #CA6154">Please click here to unsubscribe from such notifications.</a>
+""" % (user.first_name, controlMsg, user.username, controlId, user.username)
+
+	email = EmailMessage('Lighting Control Override', message, 
+				'Adaptive System Labs <asl@ethz.ch>', [user.email],
+				['adaptive.systems.lab.ethz@gmail.com', ],
+				reply_to=['adaptive.systems.lab.ethz@gmail.com'])
+	email.content_subtype = "html"  # Main content is now text/html
+	email.send()
+	
+	print "send to: "+user.email+" completed!"

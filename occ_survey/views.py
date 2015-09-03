@@ -430,5 +430,54 @@ def get_override_status(request):
 		
 		return HttpResponse("disable")
 
-		
-		
+def check_button_override(request):
+	room = request.GET["room"].lower().replace(".", "_")
+	room2 = request.GET["room"]
+	controlObj = LogControl.objects.filter(room=room2).order_by("-id")[:1][0]
+
+	time_last_button = (datetime.datetime.now() - LogButton.objects.filter(room=room2).order_by("-id")[:1][0].time).seconds / 60
+	time_last_control = (datetime.datetime.now() - controlObj.time).seconds / 60
+
+	if time_last_button < 1:
+		return HttpResponse("No button override")
+	else:
+		if time_last_control <= 5:
+			#send email
+			if controlObj.action == "off":
+				if controlObj.occupied == 0 and controlObj.bright == 1:
+					text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux)+ " lux) was too high."
+				elif controlObj.occupied == 0:
+					text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the room was unoccupied."
+
+			elif controlObj.action == "on":
+				if controlObj.occupied == 1 and controlObj.dark == 1:
+					text = "The control switched on the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux) + " lux) was too low."
+
+			user_list = UserProfile.objects.filter(room=room2)
+			for each in user_list:
+				if each.is_notification == 1:
+					controlMail(each.user, text, controlObj.id)
+
+			return HttpResponse(text)
+
+def log_button_override(request):		
+	username = request.GET["username"]
+	control_id = int(request.GET["control_id"])
+
+	user = User.objects.get(username=username)
+	control = LogControl.objects.get(id=control_id)
+
+	override = LogOverride()
+	override.user = user
+	override.control = control
+	override.save()
+
+	return HttpResponse("Your action has been saved. Please note that it will take some time for the system to adjust to your preferences.")
+
+def unsub_notification(request):
+	username = request.GET["username"]
+	user = UserProfile.objects.get(username=username)
+	user.is_notification = 0
+	user.save()
+
+	return HttpResponse("You have been unsubscribed from the notifications.")

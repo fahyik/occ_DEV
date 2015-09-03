@@ -30,4 +30,7 @@ urlpatterns = [
     url(r'^get_override_status/$', get_override_status, name="get_override_status"),
     url(r'^remote/$', remote, name="remote"),
     url(r'^update_set_points/$', update_set_points, name="update_set_points"),
+    url(r'^check_button_override/$', check_button_override, name="check_button_override"),
+    url(r'^log_button_override/$', log_button_override, name="log_button_override"), 
+    url(r'^unsub/$', unsub_notification, name="unsub"),    
 ]
