@@ -132,7 +132,7 @@ def controlMail(user, controlMsg, controlId):
 
 <p>Click <span><a href="http://asl-lighting-control.info/main/log_button_override/?username=%s&control_id=%s">here</a></span> if you would like the control to remember this action.</p>
 
-
+<p>Please ignore this email if the override action was not carried out by you.</p>
 
 <p>
 Regards,<br/>

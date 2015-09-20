@@ -435,30 +435,35 @@ def check_button_override(request):
 	room2 = request.GET["room"]
 	controlObj = LogControl.objects.filter(room=room2).order_by("-id")[:1][0]
 
-	time_last_button = (datetime.datetime.now() - LogButton.objects.filter(room=room2).order_by("-id")[:1][0].time).seconds / 60
 	time_last_control = (datetime.datetime.now() - controlObj.time).seconds / 60
 
-	if time_last_button < 1:
-		return HttpResponse("No button override")
+	if time_last_control <= 9:
+		#send email
+		if controlObj.action == "off" or controlObj.action == "REoff":
+			if controlObj.occupied == 0 and controlObj.bright == 1:
+				text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux)+ " lux) was too high."
+			elif controlObj.occupied == 0:
+				text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the room was unoccupied."
+
+		elif controlObj.action == "on" or controlObj.action == "REon":
+			if controlObj.occupied == 1 and controlObj.dark == 1:
+				text = "The control switched on the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux) + " lux) was too low."
+
+		user_list = UserProfile.objects.filter(room=room2)
+		for each in user_list:
+			if (each.last_sent_notification):
+				time_since_last = (datetime.datetime.now() - each.last_sent_notification).seconds 
+			else:
+				time_since_last = 10000
+
+			if each.is_notification == 1 and time_since_last > 300:
+				each.last_sent_notification = datetime.datetime.now()
+				each.save()
+				controlMail(each.user, text, controlObj.id)
+
+		return HttpResponse(text)
 	else:
-		if time_last_control <= 5:
-			#send email
-			if controlObj.action == "off":
-				if controlObj.occupied == 0 and controlObj.bright == 1:
-					text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux)+ " lux) was too high."
-				elif controlObj.occupied == 0:
-					text = "The control switched off the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the room was unoccupied."
-
-			elif controlObj.action == "on":
-				if controlObj.occupied == 1 and controlObj.dark == 1:
-					text = "The control switched on the lights at " + controlObj.time.strftime("%d %b %Y %X") + " because the illuminance ("+str(controlObj.lux) + " lux) was too low."
-
-			user_list = UserProfile.objects.filter(room=room2)
-			for each in user_list:
-				if each.is_notification == 1:
-					controlMail(each.user, text, controlObj.id)
-
-			return HttpResponse(text)
+		return HttpResponse("No button override!")
 
 def log_button_override(request):		
 	username = request.GET["username"]

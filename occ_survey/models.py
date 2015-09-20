@@ -70,6 +70,7 @@ class UserProfile(models.Model):
 	control_isDone = models.IntegerField(default=0)
 	impromptu_count = models.IntegerField(default=0)
 	is_notification = models.IntegerField(default=1)
+	last_sent_notification = models.DateTimeField(blank=True, null=True)
 	
 	remote_switch_count = models.IntegerField(default=0)
 	remote_change_count = models.IntegerField(default=0)
